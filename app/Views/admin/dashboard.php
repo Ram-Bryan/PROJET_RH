@@ -9,7 +9,7 @@
 <ul class="sidebar-nav">
     <li><a href="<?= site_url('admin/dashboard') ?>" class="active"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
     <li><a href="#"><i class="bi bi-inbox"></i> Toutes les demandes</a></li>
-    <li><a href="#"><i class="bi bi-people"></i> Employes</a></li>
+    <li><a href="<?= site_url('admin/employes') ?>"><i class="bi bi-people"></i> Employes</a></li>
     <li><a href="#"><i class="bi bi-building"></i> Departements</a></li>
     <li><a href="#"><i class="bi bi-tags"></i> Types de conge</a></li>
 </ul>
@@ -39,7 +39,7 @@
     <div class="topbar-breadcrumb">Administration</div>
 </div>
 <div class="topbar-actions">
-    <a href="#" class="btn-forest" style="padding:7px 14px;font-size:.82rem"><i class="bi bi-person-plus"></i> Ajouter un employe</a>
+    <a href="<?= site_url('admin/employes') ?>#form-add" class="btn-forest" style="padding:7px 14px;font-size:.82rem"><i class="bi bi-person-plus"></i> Ajouter un employe</a>
 </div>
 <?= $this->endSection() ?>
 

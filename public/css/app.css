@@ -187,6 +187,40 @@ code,pre,.mono{font-family:'DM Mono',monospace}
 .btn-forest:hover{background:var(--forest2);color:var(--white)}
 
 /* --------------------------------------------------------------------------
+   FORMS
+   -------------------------------------------------------------------------- */
+.form-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.form-section h3{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:600;margin:0 0 1.25rem;color:var(--ink)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.f-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:.875rem;font-family:'DM Sans',sans-serif;background:var(--white);color:var(--ink);cursor:pointer}
+.f-select:focus{border-color:var(--forest);outline:none;box-shadow:0 0 0 3px rgba(45,90,61,.1)}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.25rem}
+@media(max-width:600px){.form-grid-2{grid-template-columns:1fr}}
+
+/* --------------------------------------------------------------------------
+   BADGES
+   -------------------------------------------------------------------------- */
+.statut{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:500;padding:4px 9px;border-radius:12px}
+.statut::before{content:'';width:5px;height:5px;border-radius:50%;display:inline-block;flex-shrink:0}
+.s-attente{background:var(--warn-bg);color:var(--warn)}
+.s-attente::before{background:var(--warn)}
+.s-approuvee{background:var(--success-bg);color:var(--success)}
+.s-approuvee::before{background:var(--success)}
+.s-refusee{background:var(--danger-bg);color:var(--danger)}
+.s-refusee::before{background:var(--danger)}
+.s-annulee{background:#f1efe8;color:#7a8f80}
+.s-annulee::before{background:#b4b2a9}
+.type-badge{display:inline-block;font-size:.68rem;font-weight:500;padding:3px 8px;border-radius:4px;background:#f1efe8;color:#444441}
+
+/* --------------------------------------------------------------------------
+   PROFILE ROW
+   -------------------------------------------------------------------------- */
+.profile-row{display:flex;align-items:center;gap:12px}
+.profile-row .avatar{width:44px;height:44px;font-size:.8rem}
+.profile-info .pname{font-weight:500;font-size:.9rem;color:var(--ink)}
+.profile-info .pdept{font-size:.75rem;color:var(--muted)}
+
+/* --------------------------------------------------------------------------
    FOOTER
    -------------------------------------------------------------------------- */
 .footer-app{padding:.75rem 1.75rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);background:var(--white);display:flex;align-items:center;gap:6px}
