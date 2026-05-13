@@ -284,6 +284,31 @@ class CongeModel extends Model
         return $row ?: null;
     }
 
+    public function countPending(): int
+    {
+        return $this->builder()
+            ->whereIn('statut', ['en_attente', 'en attente'])
+            ->countAllResults();
+    }
+
+    public function countApprovedForMonth(string $yearMonth): int
+    {
+        return $this->builder()
+            ->where('statut', 'approuvee')
+            ->where("strftime('%Y-%m', created_at)", $yearMonth)
+            ->countAllResults();
+    }
+
+    public function getRecentDetails(int $limit = 6): array
+    {
+        return $this->db->table('v_conges_detail')
+            ->select('employe_prenom, employe_nom, type_conge_libelle, nb_jours, statut, created_at')
+            ->orderBy('created_at', 'DESC')
+            ->limit($limit)
+            ->get()
+            ->getResultArray();
+    }
+
     public function annuler(int $congeId, int $employeId): bool
     {
         $ok = (bool) $this->builder()

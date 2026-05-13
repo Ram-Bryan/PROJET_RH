@@ -1,0 +1,11 @@
+/writable/database/*.db
+/writable/database/*.db-shm
+/writable/database/*.db-wal
+/writable/session/*
+!/writable/session/index.html
+/writable/debugbar/*
+!/writable/debugbar/index.html
+/writable/cache/*
+!/writable/cache/index.html
+/writable/logs/*
+!/writable/logs/index.html

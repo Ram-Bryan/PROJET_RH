@@ -10,9 +10,9 @@
 <div class="sidebar-section">Gestion</div>
 <ul class="sidebar-nav">
     <li><a href="<?= site_url('admin/dashboard') ?>"><i class="bi bi-speedometer2"></i> Vue d'ensemble</a></li>
-    <li><a href="#"><i class="bi bi-inbox"></i> Toutes les demandes</a></li>
+    <li><a href="<?= site_url('admin/demandes') ?>"><i class="bi bi-inbox"></i> Toutes les demandes</a></li>
     <li><a href="<?= site_url('admin/employes') ?>" class="active"><i class="bi bi-people"></i> Employes</a></li>
-    <li><a href="#"><i class="bi bi-building"></i> Departements</a></li>
+    <li><a href="<?= site_url('admin/departements') ?>"><i class="bi bi-building"></i> Departements</a></li>
     <li><a href="<?= site_url('admin/types-conge') ?>"><i class="bi bi-tags"></i> Types de conge</a></li>
 </ul>
 <div class="sidebar-user">

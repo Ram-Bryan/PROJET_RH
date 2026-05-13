@@ -3,41 +3,24 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\CongeModel;
+use App\Models\DepartementModel;
+use App\Models\EmployeModel;
 
 class DashboardController extends BaseController
 {
     public function index(): string
     {
-        $db = db_connect();
-
-        $employesActifs = $db->table('employes')
-            ->where('actif', 1)
-            ->countAllResults();
-
-        $demandesEnAttente = $db->table('conges')
-            ->whereIn('statut', ['en_attente', 'en attente'])
-            ->countAllResults();
-
-        $approuveesCeMois = $db->table('conges')
-            ->where('statut', 'approuvee')
-            ->where("strftime('%Y-%m', created_at)", date('Y-m'))
-            ->countAllResults();
-
-        $departements = $db->table('departements')->countAllResults();
-
-        $recentes = $db->table('v_conges_detail')
-            ->select('employe_prenom, employe_nom, type_conge_libelle, nb_jours, statut')
-            ->orderBy('created_at', 'DESC')
-            ->limit(6)
-            ->get()
-            ->getResultArray();
+        $employeModel = new EmployeModel();
+        $congeModel = new CongeModel();
+        $departementModel = new DepartementModel();
 
         return view('admin/dashboard', [
-            'employesActifs' => $employesActifs,
-            'demandesEnAttente' => $demandesEnAttente,
-            'approuveesCeMois' => $approuveesCeMois,
-            'departementsCount' => $departements,
-            'recentes' => $recentes,
+            'employesActifs' => $employeModel->countActifs(),
+            'demandesEnAttente' => $congeModel->countPending(),
+            'approuveesCeMois' => $congeModel->countApprovedForMonth(date('Y-m')),
+            'departementsCount' => $departementModel->countAllResults(),
+            'recentes' => $congeModel->getRecentDetails(6),
         ]);
     }
 }

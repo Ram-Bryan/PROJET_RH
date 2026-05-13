@@ -15,4 +15,9 @@ class TypeCongeModel extends Model
         'jours_annuels',
         'deductible',
     ];
+
+    public function getAllOrdered(): array
+    {
+        return $this->orderBy('id', 'ASC')->findAll();
+    }
 }

@@ -46,4 +46,14 @@ class EmployeModel extends Model
             ->get()
             ->getResultArray();
     }
+
+    public function countActifs(): int
+    {
+        return $this->where('actif', 1)->countAllResults();
+    }
+
+    public function countByDepartement(int $departementId): int
+    {
+        return $this->where('departement_id', $departementId)->countAllResults();
+    }
 }
