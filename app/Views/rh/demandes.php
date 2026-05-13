@@ -16,6 +16,8 @@
       <?php endif; ?>
     </a>
   </li>
+  <li><a href="<?= site_url('rh/historique') ?>"><i class="bi bi-archive"></i> Historique</a></li>
+  <li><a href="<?= site_url('rh/soldes') ?>"><i class="bi bi-people"></i> Soldes employés</a></li>
 </ul>
 <div class="sidebar-user">
   <div class="s-user-row">

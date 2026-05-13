@@ -184,6 +184,33 @@ class CongeModel extends Model
         return $stats;
     }
 
+    public function getHistoriqueForRh(?string $statut = null, ?int $departementId = null, ?int $employeId = null): array
+    {
+        $builder = $this->db->table('v_conges_detail');
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+        if ($employeId !== null) {
+            $builder->where('employe_id', $employeId);
+        }
+
+        if ($statut !== null && $statut !== '') {
+            if ($statut === 'en_attente') {
+                $builder->whereIn('statut', ['en_attente', 'en attente']);
+            } else {
+                $builder->where('statut', $statut);
+            }
+        } else {
+            $builder->whereNotIn('statut', ['en_attente', 'en attente']);
+        }
+
+        return $builder
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
+
     public function traiter(int $congeId, int $rhEmployeId, string $statut, string $commentaire = ''): bool
     {
         $statut = trim($statut);

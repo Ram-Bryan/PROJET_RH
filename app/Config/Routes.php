@@ -27,6 +27,8 @@ $routes->group('rh', ['filter' => 'auth:rh'], static function ($routes) {
 	$routes->get('demandes', 'Rh\DemandeController::index');
 	$routes->post('demandes/approuver/(:num)', 'Rh\DemandeController::approuver/$1');
 	$routes->post('demandes/refuser/(:num)', 'Rh\DemandeController::refuser/$1');
+	$routes->get('historique', 'Rh\HistoriqueController::index');
+	$routes->get('soldes', 'Rh\SoldeController::index');
 });
 
 // Admin (protected)
