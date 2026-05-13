@@ -153,7 +153,7 @@ INSERT OR IGNORE INTO departements (id, nom) VALUES
 
 -- Types de congé
 INSERT OR IGNORE INTO types_conge (id, libelle, jours_annuels, deductible) VALUES
-    (1, 'Congé annuel', 30, 1),
+    (1, 'Congé Annuel', 30, 1),
     (2, 'Congé Maladie', 10, 1),
     (3, 'Congé Special', 5, 0);
 
@@ -178,7 +178,9 @@ INSERT OR IGNORE INTO employes (id, nom, prenom, email, password, role, departem
 -- Marie : congé annuel + maladie
 
 INSERT OR IGNORE INTO soldes (employe_id, type_conge_id, annee, jours_attribues, jours_pris) VALUES
-    (2, 1, 2025, 30, 0),
-    (2, 2, 2025, 15, 0),
-    (3, 1, 2025, 30, 0),
-    (3, 3, 2025, 5, 0);
+    (2, 1, 2026, 30, 0),
+    (2, 2, 2026, 15, 0),
+    (2, 3, 2026, 5, 0),
+    (3, 1, 2026, 30, 0),
+    (3, 2, 2026, 15, 0),
+    (3, 3, 2026, 5, 0);
