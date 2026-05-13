@@ -1,0 +1,170 @@
+ERROR - 2026-05-13 07:24:47 --> Error connecting to the database: Error: Class "SQLite3" not found in /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/app/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+#7 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+#8 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-05-13 07:24:47 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: Class "SQLite3" not found
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php')
+ERROR - 2026-05-13 07:36:09 --> Error connecting to the database: Error: Class "SQLite3" not found in /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/app/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+#7 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+#8 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-05-13 07:36:09 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: Class "SQLite3" not found
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php')
+ERROR - 2026-05-13 07:37:30 --> Error connecting to the database: Error: Class "SQLite3" not found in /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/app/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+#7 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+#8 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-05-13 07:37:30 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: Class "SQLite3" not found
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php')
+ERROR - 2026-05-13 07:46:03 --> Error connecting to the database: Error: Class "SQLite3" not found in /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/app/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+#7 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+#8 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-05-13 07:46:03 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: Class "SQLite3" not found
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php')
+ERROR - 2026-05-13 07:47:07 --> Error connecting to the database: Error: Class "SQLite3" not found in /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php:111
+Stack trace:
+#0 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(555): CodeIgniter\Database\SQLite3\Connection->connect()
+#1 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+#2 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+#3 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+#5 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/BaseModel.php(714): CodeIgniter\Model->doFirst()
+#6 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/app/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+#7 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+#8 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+#9 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+#10 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+#12 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/system/rewrite.php(44): require_once('...')
+#14 {main}
+CRITICAL - 2026-05-13 07:47:07 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [SQLite3]: Class "SQLite3" not found
+[Method: POST, Route: login]
+in SYSTEMPATH/Database/BaseConnection.php on line 606.
+ 1 SYSTEMPATH/Database/SQLite3/Connection.php(74): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseConnection.php(795): CodeIgniter\Database\SQLite3\Connection->initialize()
+ 3 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 4 SYSTEMPATH/Model.php(295): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH/BaseModel.php(714): CodeIgniter\Model->doFirst()
+ 6 APPPATH/Controllers/Auth/LoginController.php(30): CodeIgniter\BaseModel->first()
+ 7 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Auth\LoginController->login()
+ 8 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 9 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+10 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+12 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+13 SYSTEMPATH/rewrite.php(44): require_once('/home/itu/Lessons/S4/SI/Codeigniter/PROJET_RH/public/index.php')

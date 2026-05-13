@@ -33,6 +33,16 @@ class SoldeModel extends Model
         return (int) $row['jours_attribues'] - (int) $row['jours_pris'];
     }
 
+    public function getDetailByEmploye(int $employeId, int $annee): array
+    {
+        return $this->db->table('v_soldes_detail')
+            ->where('employe_id', $employeId)
+            ->where('annee', $annee)
+            ->orderBy('type_conge_libelle', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
     public function debiter(int $employeId, int $typeId, int $annee, int $nbJours): void
     {
         $nbJours = max(0, (int) $nbJours);
