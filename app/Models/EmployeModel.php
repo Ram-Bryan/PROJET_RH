@@ -20,4 +20,14 @@ class EmployeModel extends Model
         'date_embauche',
         'actif',
     ];
+
+    public function getDetail(int $id): ?array
+    {
+        $row = $this->db->table('v_employes_detail')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
 }
