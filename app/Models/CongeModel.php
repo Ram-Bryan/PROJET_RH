@@ -25,10 +25,16 @@ class CongeModel extends Model
         'created_at',
     ];
 
-    public function getByEmploye(int $id): array
+    public function getByEmploye(int $id, ?string $statut = null): array
     {
-        return $this->db->table('v_conges_detail')
-            ->where('employe_id', $id)
+        $builder = $this->db->table('v_conges_detail')
+            ->where('employe_id', $id);
+
+        if ($statut) {
+            $builder->where('statut', $statut);
+        }
+
+        return $builder
             ->orderBy('created_at', 'DESC')
             ->get()
             ->getResultArray();
@@ -93,5 +99,15 @@ class CongeModel extends Model
         }
 
         return $jours;
+    }
+
+    public function annuler(int $congeId, int $employeId): bool
+    {
+        return (bool) $this->builder()
+            ->where('id', $congeId)
+            ->where('employe_id', $employeId)
+            ->where('statut', 'en_attente')
+            ->set('statut', 'annulee')
+            ->update();
     }
 }
