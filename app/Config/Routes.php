@@ -24,6 +24,9 @@ $routes->group('employe', ['filter' => 'auth:employe'], static function ($routes
 // RH (protected)
 $routes->group('rh', ['filter' => 'auth:rh'], static function ($routes) {
 	$routes->get('dashboard', 'Rh\DashboardController::index');
+	$routes->get('demandes', 'Rh\DemandeController::index');
+	$routes->post('demandes/approuver/(:num)', 'Rh\DemandeController::approuver/$1');
+	$routes->post('demandes/refuser/(:num)', 'Rh\DemandeController::refuser/$1');
 });
 
 // Admin (protected)
