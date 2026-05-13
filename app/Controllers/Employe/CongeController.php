@@ -155,8 +155,18 @@ class CongeController extends BaseController
         $employeId = (int) session('user_id');
         $congeModel = new CongeModel();
 
+        $detail = $congeModel->getByIdForEmploye($id, $employeId);
+        if (!$detail) {
+            return redirect()->to('/employe/conges')->with('error', 'Demande introuvable.');
+        }
+
+        if (!in_array($detail['statut'], ['en_attente', 'en attente'], true)) {
+            return redirect()->to('/employe/conges')->with('error', 'Cette demande ne peut plus être annulée (statut: ' . $detail['statut'] . ').');
+        }
+
         if (!$congeModel->annuler($id, $employeId)) {
-            return redirect()->to('/employe/conges')->with('error', 'Impossible d\'annuler cette demande.');
+            log_message('error', 'Annulation échouée: conge_id={id} employe_id={employeId}', ['id' => $id, 'employeId' => $employeId]);
+            return redirect()->to('/employe/conges')->with('error', 'Impossible d\'annuler cette demande (échec DB).');
         }
 
         return redirect()->to('/employe/conges')->with('success', 'La demande a été annulée.');

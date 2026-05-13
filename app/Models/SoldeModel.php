@@ -20,6 +20,8 @@ class SoldeModel extends Model
 
     public function getRestant(int $employeId, int $typeId, int $annee): int
     {
+        $this->ensureSolde($employeId, $typeId, $annee);
+
         $row = $this->select('jours_attribues, jours_pris')
             ->where('employe_id', $employeId)
             ->where('type_conge_id', $typeId)
@@ -35,9 +37,36 @@ class SoldeModel extends Model
 
     public function getDetailByEmploye(int $employeId, int $annee): array
     {
+        $this->ensureSoldesForYear($employeId, $annee);
+
         return $this->db->table('v_soldes_detail')
             ->where('employe_id', $employeId)
             ->where('annee', $annee)
+            ->orderBy('type_conge_libelle', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
+    public function getDetailForRh(int $annee, ?int $departementId = null, ?int $employeId = null): array
+    {
+        if ($employeId !== null) {
+            $this->ensureSoldesForYear($employeId, $annee);
+        }
+
+        $builder = $this->db->table('v_soldes_detail')
+            ->where('annee', $annee);
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+        if ($employeId !== null) {
+            $builder->where('employe_id', $employeId);
+        }
+
+        return $builder
+            ->orderBy('departement_nom', 'ASC')
+            ->orderBy('employe_prenom', 'ASC')
+            ->orderBy('employe_nom', 'ASC')
             ->orderBy('type_conge_libelle', 'ASC')
             ->get()
             ->getResultArray();
@@ -89,12 +118,61 @@ class SoldeModel extends Model
             return;
         }
 
+        $joursAnnuels = $this->db->table('types_conge')
+            ->select('jours_annuels')
+            ->where('id', $typeId)
+            ->get()
+            ->getRowArray();
+
         $this->insert([
             'employe_id' => $employeId,
             'type_conge_id' => $typeId,
             'annee' => $annee,
-            'jours_attribues' => 0,
+            'jours_attribues' => (int) ($joursAnnuels['jours_annuels'] ?? 0),
             'jours_pris' => 0,
         ], false);
+    }
+
+    private function ensureSoldesForYear(int $employeId, int $annee): void
+    {
+        $types = $this->db->table('types_conge')
+            ->select('id, jours_annuels')
+            ->orderBy('id', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        if (!$types) {
+            return;
+        }
+
+        $existingRows = $this->select('type_conge_id')
+            ->where('employe_id', $employeId)
+            ->where('annee', $annee)
+            ->findAll();
+
+        $existingTypeIds = [];
+        foreach ($existingRows as $row) {
+            $existingTypeIds[(int) $row['type_conge_id']] = true;
+        }
+
+        $toInsert = [];
+        foreach ($types as $type) {
+            $typeId = (int) $type['id'];
+            if (isset($existingTypeIds[$typeId])) {
+                continue;
+            }
+
+            $toInsert[] = [
+                'employe_id' => $employeId,
+                'type_conge_id' => $typeId,
+                'annee' => $annee,
+                'jours_attribues' => (int) $type['jours_annuels'],
+                'jours_pris' => 0,
+            ];
+        }
+
+        if ($toInsert) {
+            $this->insertBatch($toInsert, false);
+        }
     }
 }

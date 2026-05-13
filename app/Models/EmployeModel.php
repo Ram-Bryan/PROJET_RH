@@ -30,4 +30,20 @@ class EmployeModel extends Model
 
         return $row ?: null;
     }
+
+    public function getActifs(?int $departementId = null): array
+    {
+        $builder = $this->db->table('v_employes_detail')
+            ->where('actif', 1);
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+
+        return $builder
+            ->orderBy('prenom', 'ASC')
+            ->orderBy('nom', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
 }

@@ -31,7 +31,11 @@ class CongeModel extends Model
             ->where('employe_id', $id);
 
         if ($statut) {
-            $builder->where('statut', $statut);
+            if ($statut === 'en_attente') {
+                $builder->whereIn('statut', ['en_attente', 'en attente']);
+            } else {
+                $builder->where('statut', $statut);
+            }
         }
 
         return $builder
@@ -43,7 +47,7 @@ class CongeModel extends Model
     public function getPendingForRh(int $rhEmployeId = null): array
     {
         $builder = $this->db->table('v_conges_detail')
-            ->where('statut', 'en_attente');
+            ->whereIn('statut', ['en_attente', 'en attente']);
 
         if ($rhEmployeId !== null) {
             $departementId = $this->db->table('employes')
@@ -61,6 +65,174 @@ class CongeModel extends Model
             ->orderBy('created_at', 'DESC')
             ->get()
             ->getResultArray();
+    }
+
+    public function getForRh(?string $statut = null, ?int $departementId = null): array
+    {
+        $builder = $this->db->table('v_conges_detail');
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+
+        if ($statut !== null && $statut !== '') {
+            if ($statut === 'en_attente') {
+                $builder->whereIn('statut', ['en_attente', 'en attente']);
+            } else {
+                $builder->where('statut', $statut);
+            }
+        }
+
+        return $builder
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
+
+    public function getByIdForRh(int $congeId): ?array
+    {
+        $row = $this->db->table('v_conges_detail')
+            ->where('id', $congeId)
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
+
+    public function compterParStatutRh(?int $departementId = null): array
+    {
+        $builder = $this->db->table('v_conges_detail')
+            ->select('statut, COUNT(*) as nb');
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+
+        $rows = $builder
+            ->groupBy('statut')
+            ->get()
+            ->getResultArray();
+
+        $counts = [
+            'total' => 0,
+            'en_attente' => 0,
+            'approuvee' => 0,
+            'refusee' => 0,
+            'annulee' => 0,
+        ];
+
+        foreach ($rows as $row) {
+            $statut = (string) ($row['statut'] ?? '');
+            $nb = (int) ($row['nb'] ?? 0);
+            $counts['total'] += $nb;
+
+            if ($statut === 'en_attente' || $statut === 'en attente') {
+                $counts['en_attente'] += $nb;
+                continue;
+            }
+
+            if (isset($counts[$statut])) {
+                $counts[$statut] += $nb;
+            }
+        }
+
+        return $counts;
+    }
+
+    public function getStatsRhMois(int $mois, int $annee, ?int $departementId = null): array
+    {
+        $mois = max(1, min(12, $mois));
+        $start = sprintf('%04d-%02d-01', $annee, $mois);
+        $end = (new DateTimeImmutable($start))->modify('+1 month')->format('Y-m-d');
+
+        $builder = $this->db->table('conges')
+            ->select("statut, COUNT(*) as nb")
+            ->where('created_at >=', $start)
+            ->where('created_at <', $end);
+
+        if ($departementId !== null) {
+            $builder->join('employes', 'employes.id = conges.employe_id', 'inner')
+                ->where('employes.departement_id', $departementId);
+        }
+
+        $rows = $builder
+            ->groupBy('statut')
+            ->get()
+            ->getResultArray();
+
+        $stats = [
+            'en_attente' => 0,
+            'approuvee' => 0,
+            'refusee' => 0,
+            'annulee' => 0,
+        ];
+
+        foreach ($rows as $row) {
+            $statut = (string) ($row['statut'] ?? '');
+            $nb = (int) ($row['nb'] ?? 0);
+
+            if ($statut === 'en_attente' || $statut === 'en attente') {
+                $stats['en_attente'] += $nb;
+                continue;
+            }
+
+            if (isset($stats[$statut])) {
+                $stats[$statut] += $nb;
+            }
+        }
+
+        return $stats;
+    }
+
+    public function getHistoriqueForRh(?string $statut = null, ?int $departementId = null, ?int $employeId = null): array
+    {
+        $builder = $this->db->table('v_conges_detail');
+
+        if ($departementId !== null) {
+            $builder->where('departement_id', $departementId);
+        }
+        if ($employeId !== null) {
+            $builder->where('employe_id', $employeId);
+        }
+
+        if ($statut !== null && $statut !== '') {
+            if ($statut === 'en_attente') {
+                $builder->whereIn('statut', ['en_attente', 'en attente']);
+            } else {
+                $builder->where('statut', $statut);
+            }
+        } else {
+            $builder->whereNotIn('statut', ['en_attente', 'en attente']);
+        }
+
+        return $builder
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
+
+    public function traiter(int $congeId, int $rhEmployeId, string $statut, string $commentaire = ''): bool
+    {
+        $statut = trim($statut);
+        if (!in_array($statut, ['approuvee', 'refusee'], true)) {
+            return false;
+        }
+
+        $ok = (bool) $this->builder()
+            ->where('id', $congeId)
+            ->whereIn('statut', ['en_attente', 'en attente'])
+            ->set([
+                'statut' => $statut,
+                'commentaire_rh' => $commentaire !== '' ? $commentaire : null,
+                'traite_par' => $rhEmployeId,
+            ])
+            ->update();
+
+        if (!$ok) {
+            return false;
+        }
+
+        return $this->db->affectedRows() > 0;
     }
 
     public function hasOverlap(int $employeId, string $debut, string $fin): bool
@@ -101,13 +273,30 @@ class CongeModel extends Model
         return $jours;
     }
 
-    public function annuler(int $congeId, int $employeId): bool
+    public function getByIdForEmploye(int $congeId, int $employeId): ?array
     {
-        return (bool) $this->builder()
+        $row = $this->db->table('v_conges_detail')
             ->where('id', $congeId)
             ->where('employe_id', $employeId)
-            ->where('statut', 'en_attente')
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
+
+    public function annuler(int $congeId, int $employeId): bool
+    {
+        $ok = (bool) $this->builder()
+            ->where('id', $congeId)
+            ->where('employe_id', $employeId)
+            ->whereIn('statut', ['en_attente', 'en attente'])
             ->set('statut', 'annulee')
             ->update();
+
+        if (!$ok) {
+            return false;
+        }
+
+        return $this->db->affectedRows() > 0;
     }
 }
