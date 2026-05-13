@@ -18,6 +18,7 @@
       <div class="user-name"><?= esc(trim($employe['prenom'] . ' ' . $employe['nom'])) ?></div>
       <div class="user-role">Employé<?= $employe['dept'] ? ' · ' . esc($employe['dept']) : '' ?></div>
     </div>
+    <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
   </div>
 </div>
 <?= $this->endSection() ?>
