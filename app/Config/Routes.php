@@ -14,3 +14,13 @@ $routes->get('logout', 'Auth\LoginController::logout');
 $routes->group('employe', ['filter' => 'auth:employe'], static function ($routes) {
 	$routes->get('dashboard', 'Employe\DashboardController::index');
 });
+
+// RH (protected)
+$routes->group('rh', ['filter' => 'auth:rh'], static function ($routes) {
+	$routes->get('dashboard', 'Rh\DashboardController::index');
+});
+
+// Admin (protected)
+$routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
+	$routes->get('dashboard', 'Admin\DashboardController::index');
+});
