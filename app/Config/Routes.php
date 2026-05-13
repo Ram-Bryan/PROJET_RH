@@ -24,4 +24,5 @@ $routes->group('rh', ['filter' => 'auth:rh'], static function ($routes) {
 $routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
 	$routes->get('dashboard', 'Admin\DashboardController::index');
 	$routes->get('employes', 'Admin\\EmployeController::index');
+	$routes->post('employes/store', 'Admin\\EmployeController::store');
 });

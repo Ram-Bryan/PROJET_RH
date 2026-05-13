@@ -46,54 +46,83 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+<?php $errors = session('errors') ?? []; ?>
 <div class="form-section" id="form-add">
     <h3><i class="bi bi-person-plus" style="color:var(--forest);margin-right:6px"></i>Ajouter un employe</h3>
-    <div class="form-grid-2" style="margin-bottom:1rem">
-        <div class="f-group">
-            <label class="f-label">Prenom</label>
-            <input type="text" class="f-input" placeholder="Jean" />
+    <form action="<?= site_url('admin/employes/store') ?>" method="post">
+        <?= csrf_field() ?>
+        <div class="form-grid-2" style="margin-bottom:1rem">
+            <div class="f-group">
+                <label class="f-label">Prenom</label>
+                <input type="text" class="f-input" name="prenom" placeholder="Jean" value="<?= esc(old('prenom') ?? '') ?>" />
+                <?php if (isset($errors['prenom'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['prenom']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Nom</label>
+                <input type="text" class="f-input" name="nom" placeholder="Rakoto" value="<?= esc(old('nom') ?? '') ?>" />
+                <?php if (isset($errors['nom'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['nom']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Email</label>
+                <input type="email" class="f-input" name="email" placeholder="jean.rakoto@techmada.mg" value="<?= esc(old('email') ?? '') ?>" />
+                <?php if (isset($errors['email'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['email']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Mot de passe initial</label>
+                <input type="password" class="f-input" name="password" placeholder="A communiquer a l'employe" />
+                <?php if (isset($errors['password'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['password']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Departement</label>
+                <select class="f-select" name="departement_id">
+                    <option value="">-- Aucun --</option>
+                    <?php foreach ($departements as $departement): ?>
+                        <option value="<?= esc($departement['id']) ?>" <?= (string) old('departement_id') === (string) $departement['id'] ? 'selected' : '' ?>>
+                            <?= esc($departement['nom']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <?php if (isset($errors['departement_id'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['departement_id']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Role</label>
+                <select class="f-select" name="role">
+                    <?php $selectedRole = old('role') ?? 'employe'; ?>
+                    <option value="employe" <?= $selectedRole === 'employe' ? 'selected' : '' ?>>Employe</option>
+                    <option value="rh" <?= $selectedRole === 'rh' ? 'selected' : '' ?>>Responsable RH</option>
+                    <option value="admin" <?= $selectedRole === 'admin' ? 'selected' : '' ?>>Administrateur</option>
+                </select>
+                <?php if (isset($errors['role'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['role']) ?></div>
+                <?php endif; ?>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Date d'embauche</label>
+                <input type="date" class="f-input" name="date_embauche" value="<?= esc(old('date_embauche') ?? date('Y-m-d')) ?>" />
+                <?php if (isset($errors['date_embauche'])): ?>
+                    <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['date_embauche']) ?></div>
+                <?php endif; ?>
+            </div>
         </div>
-        <div class="f-group">
-            <label class="f-label">Nom</label>
-            <input type="text" class="f-input" placeholder="Rakoto" />
+        <div class="flash flash-info" style="margin-bottom:1rem">
+            <i class="bi bi-info-circle-fill"></i>
+            <span style="font-size:.82rem">Les soldes de conges seront initialises automatiquement selon les types de conge configures.</span>
         </div>
-        <div class="f-group">
-            <label class="f-label">Email</label>
-            <input type="email" class="f-input" placeholder="jean.rakoto@techmada.mg" />
+        <div class="form-actions">
+            <button class="btn-forest" type="submit"><i class="bi bi-plus"></i> Creer l'employe</button>
+            <button class="btn-secondary" type="reset">Reinitialiser</button>
         </div>
-        <div class="f-group">
-            <label class="f-label">Mot de passe initial</label>
-            <input type="password" class="f-input" placeholder="A communiquer a l'employe" />
-        </div>
-        <div class="f-group">
-            <label class="f-label">Departement</label>
-            <select class="f-select">
-                <?php foreach ($departements as $departement): ?>
-                    <option value="<?= esc($departement['id']) ?>"><?= esc($departement['nom']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="f-group">
-            <label class="f-label">Role</label>
-            <select class="f-select">
-                <option value="employe">Employe</option>
-                <option value="rh">Responsable RH</option>
-                <option value="admin">Administrateur</option>
-            </select>
-        </div>
-        <div class="f-group">
-            <label class="f-label">Date d'embauche</label>
-            <input type="date" class="f-input" value="<?= date('Y-m-d') ?>" />
-        </div>
-    </div>
-    <div class="flash flash-info" style="margin-bottom:1rem">
-        <i class="bi bi-info-circle-fill"></i>
-        <span style="font-size:.82rem">Les soldes de conges seront initialises automatiquement selon les types de conge configures.</span>
-    </div>
-    <div class="form-actions">
-        <button class="btn-forest"><i class="bi bi-plus"></i> Creer l'employe</button>
-        <button class="btn-secondary" type="button">Reinitialiser</button>
-    </div>
+    </form>
 </div>
 
 <div class="data-card">
