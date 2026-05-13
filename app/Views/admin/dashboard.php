@@ -47,24 +47,24 @@
 <div class="metrics">
     <div class="metric">
         <div class="metric-top"><div class="metric-icon mi-forest"><i class="bi bi-people"></i></div></div>
-        <div class="metric-val">24</div>
+        <div class="metric-val"><?= esc($employesActifs ?? 0) ?></div>
         <div class="metric-label">Employes actifs</div>
         <div class="metric-sub up"><i class="bi bi-arrow-up-short"></i> +2 ce mois</div>
     </div>
     <div class="metric">
         <div class="metric-top"><div class="metric-icon mi-amber"><i class="bi bi-hourglass-split"></i></div></div>
-        <div class="metric-val">4</div>
+        <div class="metric-val"><?= esc($demandesEnAttente ?? 0) ?></div>
         <div class="metric-label">Demandes en attente</div>
     </div>
     <div class="metric">
         <div class="metric-top"><div class="metric-icon mi-green"><i class="bi bi-calendar-check"></i></div></div>
-        <div class="metric-val">31</div>
+        <div class="metric-val"><?= esc($approuveesCeMois ?? 0) ?></div>
         <div class="metric-label">Approuvees ce mois</div>
         <div class="metric-sub up"><i class="bi bi-arrow-up-short"></i> +6 vs mois dernier</div>
     </div>
     <div class="metric">
         <div class="metric-top"><div class="metric-icon mi-blue"><i class="bi bi-building"></i></div></div>
-        <div class="metric-val">4</div>
+        <div class="metric-val"><?= esc($departementsCount ?? 0) ?></div>
         <div class="metric-label">Departements</div>
     </div>
 </div>
@@ -79,18 +79,28 @@
             <tr><th>Employe</th><th>Type</th><th>Duree</th><th>Statut</th></tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="td-name">Soa Rakoto</td>
-                <td>Annuel</td>
-                <td class="td-mono">5 j</td>
-                <td><span class="statut s-attente">en attente</span></td>
-            </tr>
-            <tr>
-                <td class="td-name">Tsiry Fidy</td>
-                <td>Maladie</td>
-                <td class="td-mono">2 j</td>
-                <td><span class="statut s-attente">en attente</span></td>
-            </tr>
+            <?php if (!empty($recentes)): ?>
+                <?php foreach ($recentes as $demande): ?>
+                    <tr>
+                        <td class="td-name"><?= esc(($demande['employe_prenom'] ?? '') . ' ' . ($demande['employe_nom'] ?? '')) ?></td>
+                        <td><?= esc($demande['type_conge_libelle'] ?? '-') ?></td>
+                        <td class="td-mono"><?= esc(($demande['nb_jours'] ?? 0) . ' j') ?></td>
+                        <td>
+                            <?php if (($demande['statut'] ?? '') === 'en_attente'): ?>
+                                <span class="statut s-attente">en attente</span>
+                            <?php elseif (($demande['statut'] ?? '') === 'approuvee'): ?>
+                                <span class="statut s-approuvee">approuvee</span>
+                            <?php elseif (($demande['statut'] ?? '') === 'refusee'): ?>
+                                <span class="statut s-refusee">refusee</span>
+                            <?php else: ?>
+                                <span class="statut s-annulee">annulee</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="4" class="td-muted">Aucune demande recente.</td></tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

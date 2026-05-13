@@ -36,4 +36,11 @@ $routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
 	$routes->get('dashboard', 'Admin\DashboardController::index');
 	$routes->get('employes', 'Admin\\EmployeController::index');
 	$routes->post('employes/store', 'Admin\\EmployeController::store');
+	$routes->post('employes/update/(:num)', 'Admin\\EmployeController::update/$1');
+	$routes->post('employes/toggle-status/(:num)', 'Admin\\EmployeController::toggleStatus/$1');
+	$routes->post('employes/delete/(:num)', 'Admin\\EmployeController::delete/$1');
+	$routes->get('types-conge', 'Admin\\TypeCongeController::index');
+	$routes->post('types-conge/store', 'Admin\\TypeCongeController::store');
+	$routes->post('types-conge/update/(:num)', 'Admin\\TypeCongeController::update/$1');
+	$routes->post('types-conge/delete/(:num)', 'Admin\\TypeCongeController::delete/$1');
 });

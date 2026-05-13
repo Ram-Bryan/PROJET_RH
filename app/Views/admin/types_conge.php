@@ -86,7 +86,7 @@
     </div>
     <table class="tbl">
         <thead>
-            <tr><th>ID</th><th>Libelle</th><th>Jours annuels</th><th>Deductible</th></tr>
+            <tr><th>ID</th><th>Libelle</th><th>Jours annuels</th><th>Deductible</th><th>Actions</th></tr>
         </thead>
         <tbody>
             <?php if (!empty($types)): ?>
@@ -102,11 +102,32 @@
                                 <span class="statut s-annulee" style="font-size:.68rem">non</span>
                             <?php endif; ?>
                         </td>
+                        <td>
+                            <details>
+                                <summary class="btn-sm btn-edit" style="display:inline-block;cursor:pointer;list-style:none">
+                                    <i class="bi bi-pencil"></i> Editer
+                                </summary>
+                                <form action="<?= site_url('admin/types-conge/update/' . $type['id']) ?>" method="post" style="margin-top:.5rem;display:grid;gap:.45rem;min-width:220px">
+                                    <?= csrf_field() ?>
+                                    <input type="text" class="f-input" name="libelle" value="<?= esc($type['libelle']) ?>" />
+                                    <input type="number" min="0" class="f-input" name="jours_annuels" value="<?= esc($type['jours_annuels']) ?>" />
+                                    <select class="f-select" name="deductible">
+                                        <option value="1" <?= (int) $type['deductible'] === 1 ? 'selected' : '' ?>>Oui</option>
+                                        <option value="0" <?= (int) $type['deductible'] === 0 ? 'selected' : '' ?>>Non</option>
+                                    </select>
+                                    <button class="btn-sm btn-edit" type="submit"><i class="bi bi-check2-circle"></i> Enregistrer</button>
+                                </form>
+                            </details>
+                            <form action="<?= site_url('admin/types-conge/delete/' . $type['id']) ?>" method="post" style="display:inline-block;margin-top:.45rem" onsubmit="return confirm('Supprimer ce type de conge ?');">
+                                <?= csrf_field() ?>
+                                <button class="btn-sm btn-del" type="submit"><i class="bi bi-trash"></i> Supprimer</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4" class="td-muted">Aucun type de conge enregistre.</td>
+                    <td colspan="5" class="td-muted">Aucun type de conge enregistre.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

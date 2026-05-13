@@ -185,4 +185,47 @@ class EmployeController extends BaseController
 
         return redirect()->to('admin/employes')->with('success', $message);
     }
+
+    public function delete(int $id)
+    {
+        $db = db_connect();
+
+        $employe = $db->table('employes')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+
+        if (!$employe) {
+            return redirect()->to('admin/employes')->with('error', 'Employe introuvable.');
+        }
+
+        if ((int) $employe['id'] === (int) session('user_id')) {
+            return redirect()->to('admin/employes')->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        $hasConge = $db->table('conges')
+            ->groupStart()
+            ->where('employe_id', $id)
+            ->orWhere('traite_par', $id)
+            ->groupEnd()
+            ->countAllResults() > 0;
+
+        if ($hasConge) {
+            return redirect()->to('admin/employes')->with('error', 'Suppression impossible: cet employe est lie a des demandes de conge.');
+        }
+
+        $db->transBegin();
+
+        try {
+            $db->table('soldes')->where('employe_id', $id)->delete();
+            $db->table('employes')->where('id', $id)->delete();
+
+            $db->transCommit();
+        } catch (Exception $exception) {
+            $db->transRollback();
+            return redirect()->to('admin/employes')->with('error', 'Suppression impossible. Veuillez reessayer.');
+        }
+
+        return redirect()->to('admin/employes')->with('success', 'Employe supprime avec succes.');
+    }
 }

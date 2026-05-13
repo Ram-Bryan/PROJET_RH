@@ -201,6 +201,10 @@
                                 <button class="btn-sm btn-view" type="submit"><i class="bi bi-arrow-counterclockwise"></i> Reactiver</button>
                             <?php endif; ?>
                         </form>
+                        <form action="<?= site_url('admin/employes/delete/' . $employe['id']) ?>" method="post" style="display:inline-block;margin-top:.45rem" onsubmit="return confirm('Supprimer definitivement cet employe ?');">
+                            <?= csrf_field() ?>
+                            <button class="btn-sm btn-del" type="submit"><i class="bi bi-trash"></i> Supprimer</button>
+                        </form>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -78,5 +78,79 @@ class TypeCongeController extends BaseController
 
         return redirect()->to('admin/types-conge')->with('success', 'Type de conge cree avec succes.');
     }
-}
 
+    public function update(int $id)
+    {
+        $db = db_connect();
+
+        $existing = $db->table('types_conge')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+
+        if (!$existing) {
+            return redirect()->to('admin/types-conge')->with('error', 'Type de conge introuvable.');
+        }
+
+        $rules = [
+            'libelle' => 'required|min_length[2]|max_length[100]',
+            'jours_annuels' => 'required|integer|greater_than_equal_to[0]',
+            'deductible' => 'required|in_list[0,1]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $data = [
+            'libelle' => (string) $this->request->getPost('libelle'),
+            'jours_annuels' => (int) $this->request->getPost('jours_annuels'),
+            'deductible' => (int) $this->request->getPost('deductible'),
+        ];
+
+        try {
+            $db->table('types_conge')
+                ->where('id', $id)
+                ->update($data);
+        } catch (Exception $exception) {
+            return redirect()->to('admin/types-conge')->with('error', 'Mise a jour impossible. Veuillez reessayer.');
+        }
+
+        return redirect()->to('admin/types-conge')->with('success', 'Type de conge modifie avec succes.');
+    }
+
+    public function delete(int $id)
+    {
+        $db = db_connect();
+
+        $type = $db->table('types_conge')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+
+        if (!$type) {
+            return redirect()->to('admin/types-conge')->with('error', 'Type de conge introuvable.');
+        }
+
+        $hasConge = $db->table('conges')
+            ->where('type_conge_id', $id)
+            ->countAllResults() > 0;
+
+        if ($hasConge) {
+            return redirect()->to('admin/types-conge')->with('error', 'Suppression impossible: ce type est deja utilise dans des demandes.');
+        }
+
+        $db->transBegin();
+
+        try {
+            $db->table('soldes')->where('type_conge_id', $id)->delete();
+            $db->table('types_conge')->where('id', $id)->delete();
+            $db->transCommit();
+        } catch (Exception $exception) {
+            $db->transRollback();
+            return redirect()->to('admin/types-conge')->with('error', 'Suppression impossible. Veuillez reessayer.');
+        }
+
+        return redirect()->to('admin/types-conge')->with('success', 'Type de conge supprime avec succes.');
+    }
+}
