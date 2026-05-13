@@ -148,7 +148,7 @@ class CongeController extends BaseController
             return redirect()->to('/');
         }
 
-        if ($this->request->getMethod() !== 'post') {
+        if (strtolower($this->request->getMethod())  !== 'post') {
             return redirect()->to('/employe/conges');
         }
 

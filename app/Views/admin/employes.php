@@ -2,8 +2,8 @@
 
 <?= $this->section('sidebar') ?>
 <div class="sidebar-brand">
-    <div class="sidebar-logo-icon" style="background:var(--ink);border:1px solid rgba(255,255,255,.15)">
-        <i class="bi bi-shield-check" style="color:var(--leaf)"></i>
+    <div class="sidebar-logo-icon sidebar-logo-icon-admin">
+        <i class="bi bi-shield-check"></i>
     </div>
     <div class="sidebar-brand-name">TechMada RH<span>Administration</span></div>
 </div>
@@ -23,12 +23,12 @@
     $initials = $initials !== '' ? $initials : 'AD';
     ?>
     <div class="s-user-row">
-        <div class="avatar" style="background:#5a2d82;width:32px;height:32px;font-size:.7rem"><?= esc($initials) ?></div>
+        <div class="avatar avatar-admin"><?= esc($initials) ?></div>
         <div>
             <div class="user-name"><?= esc(trim($prenom . ' ' . $nom)) ?></div>
             <div class="user-role">Administrateur</div>
         </div>
-        <a href="<?= site_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Deconnexion">
+        <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Deconnexion">
             <i class="bi bi-box-arrow-right"></i>
         </a>
     </div>
@@ -38,20 +38,20 @@
 <?= $this->section('topbar') ?>
 <div>
     <div class="topbar-title">Gestion des employes</div>
-    <div class="topbar-breadcrumb"><a href="<?= site_url('admin/dashboard') ?>">Admin</a> <i class="bi bi-chevron-right" style="font-size:.6rem"></i> Employes</div>
+    <div class="topbar-breadcrumb"><a href="<?= site_url('admin/dashboard') ?>">Admin</a> <i class="bi bi-chevron-right breadcrumb-sep"></i> Employes</div>
 </div>
 <div class="topbar-actions">
-    <a href="#form-add" class="btn-forest" style="padding:7px 14px;font-size:.82rem"><i class="bi bi-person-plus"></i> Ajouter</a>
+    <a href="#form-add" class="btn-forest btn-compact"><i class="bi bi-person-plus"></i> Ajouter</a>
 </div>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <?php $errors = session('errors') ?? []; ?>
 <div class="form-section" id="form-add">
-    <h3><i class="bi bi-person-plus" style="color:var(--forest);margin-right:6px"></i>Ajouter un employe</h3>
+    <h3><i class="bi bi-person-plus icon-forest icon-mr-6"></i>Ajouter un employe</h3>
     <form action="<?= site_url('admin/employes/store') ?>" method="post">
         <?= csrf_field() ?>
-        <div class="form-grid-2" style="margin-bottom:1rem">
+        <div class="form-grid-2 u-mb-1">
             <div class="f-group">
                 <label class="f-label">Prenom</label>
                 <input type="text" class="f-input" name="prenom" placeholder="Jean" value="<?= esc(old('prenom') ?? '') ?>" />
@@ -114,9 +114,9 @@
                 <?php endif; ?>
             </div>
         </div>
-        <div class="flash flash-info" style="margin-bottom:1rem">
+        <div class="flash flash-info flash-tight">
             <i class="bi bi-info-circle-fill"></i>
-            <span style="font-size:.82rem">Les soldes de conges seront initialises automatiquement selon les types de conge configures.</span>
+            <span class="flash-text-small">Les soldes de conges seront initialises automatiquement selon les types de conge configures.</span>
         </div>
         <div class="form-actions">
             <button class="btn-forest" type="submit"><i class="bi bi-plus"></i> Creer l'employe</button>
@@ -128,9 +128,9 @@
 <div class="data-card">
     <div class="data-card-head">
         <h3>Tous les employes</h3>
-        <div style="display:flex;gap:6px">
-            <input type="text" class="f-input" placeholder="Rechercher..." style="width:200px;padding:6px 10px;font-size:.8rem" />
-            <select class="f-select" style="font-size:.8rem;padding:6px 10px;width:auto">
+        <div class="search-row">
+            <input type="text" class="f-input input-compact search-input" placeholder="Rechercher..." />
+            <select class="f-select f-compact">
                 <option>Tous les depts</option>
                 <?php foreach ($departements as $departement): ?>
                     <option value="<?= esc($departement['id']) ?>"><?= esc($departement['nom']) ?></option>
@@ -147,7 +147,7 @@
                 <tr>
                     <td>
                         <div class="profile-row">
-                            <div class="avatar av-green" style="width:32px;height:32px;font-size:.68rem">
+                            <div class="avatar av-green avatar-32-sm">
                                 <?= esc(strtoupper(substr($employe['prenom'], 0, 1) . substr($employe['nom'], 0, 1))) ?>
                             </div>
                             <div class="profile-info">
@@ -158,12 +158,12 @@
                     </td>
                     <td class="td-muted"><?= esc($employe['departement_nom'] ?? '—') ?></td>
                     <td><span class="type-badge"><?= esc($employe['role']) ?></span></td>
-                    <td class="td-muted td-mono" style="font-size:.78rem"><?= esc($employe['date_embauche']) ?></td>
+                    <td class="td-muted td-mono td-note-78"><?= esc($employe['date_embauche']) ?></td>
                     <td>
                         <?php if ((int) $employe['actif'] === 1): ?>
-                            <span class="statut s-approuvee" style="font-size:.68rem">actif</span>
+                            <span class="statut s-approuvee statut-small">actif</span>
                         <?php else: ?>
-                            <span class="statut s-annulee" style="font-size:.68rem">inactif</span>
+                            <span class="statut s-annulee statut-small">inactif</span>
                         <?php endif; ?>
                     </td>
                     <td>

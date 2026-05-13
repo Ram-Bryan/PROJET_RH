@@ -2,7 +2,7 @@
 
 <?= $this->section('sidebar') ?>
 <div class="sidebar-brand">
-    <div class="sidebar-logo-icon" style="background:var(--ink);border:1px solid rgba(255,255,255,.15)"><i class="bi bi-shield-check" style="color:var(--leaf)"></i></div>
+    <div class="sidebar-logo-icon sidebar-logo-icon-admin"><i class="bi bi-shield-check"></i></div>
     <div class="sidebar-brand-name">TechMada RH<span>Administration</span></div>
 </div>
 <div class="sidebar-section">Gestion</div>
@@ -21,12 +21,12 @@
     $initials = $initials !== '' ? $initials : 'AD';
     ?>
     <div class="s-user-row">
-        <div class="avatar" style="background:#5a2d82;width:32px;height:32px;font-size:.7rem"><?= esc($initials) ?></div>
+        <div class="avatar avatar-admin"><?= esc($initials) ?></div>
         <div>
             <div class="user-name"><?= esc(trim($prenom . ' ' . $nom)) ?></div>
             <div class="user-role">Administrateur</div>
         </div>
-        <a href="<?= site_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Deconnexion">
+        <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Deconnexion">
             <i class="bi bi-box-arrow-right"></i>
         </a>
     </div>
@@ -39,7 +39,7 @@
     <div class="topbar-breadcrumb">Administration</div>
 </div>
 <div class="topbar-actions">
-    <a href="<?= site_url('admin/employes') ?>#form-add" class="btn-forest" style="padding:7px 14px;font-size:.82rem"><i class="bi bi-person-plus"></i> Ajouter un employe</a>
+    <a href="<?= site_url('admin/employes') ?>#form-add" class="btn-forest btn-compact"><i class="bi bi-person-plus"></i> Ajouter un employe</a>
 </div>
 <?= $this->endSection() ?>
 
@@ -70,10 +70,10 @@
 </div>
 
 <div class="data-card">
-    <div class="data-card-head">
-        <h3>Demandes recentes</h3>
-        <a href="#" style="font-size:.8rem;color:var(--forest);text-decoration:none">Tout voir -></a>
-    </div>
+<div class="data-card-head">
+    <h3>Demandes recentes</h3>
+    <a href="#" class="link-forest">Tout voir →</a>
+</div>
     <table class="tbl">
         <thead>
             <tr><th>Employe</th><th>Type</th><th>Duree</th><th>Statut</th></tr>

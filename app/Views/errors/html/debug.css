@@ -157,6 +157,10 @@ table {
     width: 100%;
     overflow: hidden;
 }
+.w-10em { width: 10em; }
+.w-12em { width: 12em; }
+.w-15em { width: 15em; }
+.w-100 { width: 100%; }
 th {
     text-align: left;
     border-bottom: 1px solid #e7e7e7;

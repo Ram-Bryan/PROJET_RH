@@ -229,7 +229,7 @@ $errorId = uniqid('error', true);
                 <table>
                     <tbody>
                         <tr>
-                            <td style="width: 10em">Path</td>
+                            <td class="w-10em">Path</td>
                             <td><?= esc($request->getUri()) ?></td>
                         </tr>
                         <tr>
@@ -241,7 +241,7 @@ $errorId = uniqid('error', true);
                             <td><?= esc($request->getIPAddress()) ?></td>
                         </tr>
                         <tr>
-                            <td style="width: 10em">Is AJAX Request?</td>
+                            <td class="w-10em">Is AJAX Request?</td>
                             <td><?= $request->isAJAX() ? 'yes' : 'no' ?></td>
                         </tr>
                         <tr>
@@ -272,7 +272,7 @@ $errorId = uniqid('error', true);
 
                     <h3>$<?= esc($var) ?></h3>
 
-                    <table style="width: 100%">
+                    <table class="w-100">
                         <thead>
                             <tr>
                                 <th>Key</th>
@@ -348,7 +348,7 @@ $errorId = uniqid('error', true);
             <div class="content" id="response">
                 <table>
                     <tr>
-                        <td style="width: 15em">Response Status</td>
+                        <td class="w-15em">Response Status</td>
                         <td><?= esc($response->getStatusCode() . ' - ' . $response->getReasonPhrase()) ?></td>
                     </tr>
                 </table>
@@ -408,7 +408,7 @@ $errorId = uniqid('error', true);
                             <td><?= esc(static::describeMemory(memory_get_usage(true))) ?></td>
                         </tr>
                         <tr>
-                            <td style="width: 12em">Peak Memory Usage:</td>
+                            <td class="w-12em">Peak Memory Usage:</td>
                             <td><?= esc(static::describeMemory(memory_get_peak_usage(true))) ?></td>
                         </tr>
                         <tr>

@@ -9,13 +9,13 @@
             <div class="auth-left">
                 <div>
                     <p class="auth-left-brand">TechMada RH<span>Gestion des congés</span></p>
-                    <p class="auth-left-text" style="margin-top:2rem">
+                    <p class="auth-left-text auth-left-text-spaced">
                         <strong>Bienvenue sur votre espace RH.</strong>
                         Gérez vos demandes de congés, consultez votre solde et suivez l'état de vos demandes en temps réel.
                     </p>
                 </div>
                 <div class="auth-roles">
-                    <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.25);margin-bottom:4px">
+                    <div class="auth-roles-title">
                         Comptes de démonstration
                     </div>
                     <div class="role-pill">
@@ -75,7 +75,7 @@
                             <div class="f-error"><i class="bi bi-exclamation-circle"></i> <?= esc($errors['password']) ?></div>
                         <?php endif; ?>
                     </div>
-                    <button type="submit" class="btn-primary" style="margin-top:.5rem">
+                    <button type="submit" class="btn-primary auth-submit">
                         Se connecter <i class="bi bi-arrow-right-short"></i>
                     </button>
                 </form>

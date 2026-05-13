@@ -26,7 +26,7 @@
       <div class="user-name"><?= esc(trim($rh['prenom'] . ' ' . $rh['nom'])) ?></div>
       <div class="user-role">Responsable RH</div>
     </div>
-    <a href="<?= site_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion">
+    <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Déconnexion">
       <i class="bi bi-box-arrow-right"></i>
     </a>
   </div>
@@ -36,10 +36,10 @@
 <?= $this->section('topbar') ?>
 <div>
   <div class="topbar-title">Demandes à traiter</div>
-  <div class="topbar-breadcrumb"><a href="<?= site_url('rh/dashboard') ?>">Accueil</a> <i class="bi bi-chevron-right" style="font-size:.6rem"></i> Demandes</div>
+  <div class="topbar-breadcrumb"><a href="<?= site_url('rh/dashboard') ?>">Accueil</a> <i class="bi bi-chevron-right breadcrumb-sep"></i> Demandes</div>
 </div>
 <div class="topbar-actions">
-  <span style="font-size:.8rem;color:var(--muted);background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:5px 10px;display:flex;align-items:center;gap:5px;color:var(--warn)">
+  <span class="topbar-pill-warn">
     <i class="bi bi-hourglass-split"></i> <?= esc((string) ($counts['en_attente'] ?? 0)) ?> en attente
   </span>
 </div>
@@ -49,8 +49,8 @@
 <div class="data-card">
   <div class="data-card-head">
     <h3>Toutes les demandes</h3>
-    <form method="get" action="<?= site_url('rh/demandes') ?>" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <select class="f-select" name="statut" style="font-size:.8rem;padding:6px 10px;width:auto">
+    <form method="get" action="<?= site_url('rh/demandes') ?>" class="filter-form">
+      <select class="f-select f-compact" name="statut">
         <option value="" <?= $statutActif === '' ? 'selected' : '' ?>>Tous (<?= esc((string) ($counts['total'] ?? 0)) ?>)</option>
         <option value="en_attente" <?= $statutActif === 'en_attente' ? 'selected' : '' ?>>En attente (<?= esc((string) ($counts['en_attente'] ?? 0)) ?>)</option>
         <option value="approuvee" <?= $statutActif === 'approuvee' ? 'selected' : '' ?>>Approuvées (<?= esc((string) ($counts['approuvee'] ?? 0)) ?>)</option>
@@ -58,7 +58,7 @@
         <option value="annulee" <?= $statutActif === 'annulee' ? 'selected' : '' ?>>Annulées (<?= esc((string) ($counts['annulee'] ?? 0)) ?>)</option>
       </select>
 
-      <select class="f-select" name="departement_id" style="font-size:.8rem;padding:6px 10px;width:auto">
+      <select class="f-select f-compact" name="departement_id">
         <option value="">Tous les départements</option>
         <?php foreach ($departements as $dept): ?>
           <option value="<?= esc((string) $dept['id']) ?>" <?= (int) $departementIdActif === (int) $dept['id'] ? 'selected' : '' ?>>
@@ -67,8 +67,8 @@
         <?php endforeach; ?>
       </select>
 
-      <button class="btn-secondary" type="submit" style="padding:7px 12px;font-size:.8rem"><i class="bi bi-funnel"></i> Filtrer</button>
-      <a class="btn-secondary" href="<?= site_url('rh/demandes') ?>" style="padding:7px 12px;font-size:.8rem"><i class="bi bi-x"></i> Reset</a>
+      <button class="btn-secondary btn-xs" type="submit"><i class="bi bi-funnel"></i> Filtrer</button>
+      <a class="btn-secondary btn-xs" href="<?= site_url('rh/demandes') ?>"><i class="bi bi-x"></i> Reset</a>
     </form>
   </div>
 
@@ -84,7 +84,7 @@
           <tr>
             <td>
               <div class="profile-row">
-                <div class="avatar av-green" style="width:32px;height:32px;font-size:.7rem"><?= esc($demande['initials']) ?></div>
+                <div class="avatar av-green avatar-32"><?= esc($demande['initials']) ?></div>
                 <div class="profile-info">
                   <div class="pname"><?= esc($demande['employe']) ?></div>
                   <div class="pdept"><?= esc($demande['departement']) ?></div>
@@ -92,22 +92,22 @@
               </div>
             </td>
             <td><span class="type-badge <?= esc($demande['typeBadge']) ?>"><?= esc($demande['type']) ?></span></td>
-            <td class="td-muted" style="font-size:.8rem"><?= esc($demande['periode']) ?></td>
+            <td class="td-muted td-note-80"><?= esc($demande['periode']) ?></td>
             <td class="td-mono"><?= esc((string) $demande['nbJours']) ?> j</td>
             <td>
               <?php if ($demande['soldeRestant'] === null): ?>
                 <span class="td-muted">—</span>
               <?php else: ?>
-                <span class="td-mono" style="color:<?= $demande['soldeClass'] === 'warn' ? 'var(--warn)' : 'var(--success)' ?>;font-weight:500"><?= esc((string) $demande['soldeRestant']) ?> j</span>
+                <span class="solde-restant <?= esc($demande['soldeClass']) ?>"><?= esc((string) $demande['soldeRestant']) ?> j</span>
               <?php endif; ?>
             </td>
             <td><span class="statut <?= esc($demande['statutBadge']) ?>"><?= esc($demande['statutLabel']) ?></span></td>
             <td>
               <?php if (in_array($demande['statut'], ['en_attente', 'en attente'], true)): ?>
                 <div class="action-btns">
-                  <a class="btn-sm btn-approve<?= !$demande['approvable'] ? ' disabled' : '' ?>"
+                  <a class="btn-sm btn-approve<?= !$demande['approvable'] ? ' btn-disabled' : '' ?>"
                      href="<?= site_url('rh/demandes') . '?' . http_build_query(['focus' => $demande['id'], 'action' => 'approve', 'statut' => $statutActif, 'departement_id' => $departementIdActif]) ?>"
-                     style="<?= !$demande['approvable'] ? 'pointer-events:none;opacity:.45' : '' ?>">
+                     aria-disabled="<?= !$demande['approvable'] ? 'true' : 'false' ?>">
                     <i class="bi bi-check-lg"></i> Approuver
                   </a>
                   <a class="btn-sm btn-refuse"
@@ -116,7 +116,7 @@
                   </a>
                 </div>
               <?php else: ?>
-                <span class="td-muted" style="font-size:.75rem"><?= $demande['traitePar'] !== '' ? 'Traité par ' . esc($demande['traitePar']) : '—' ?></span>
+                <span class="td-muted td-note-75"><?= $demande['traitePar'] !== '' ? 'Traité par ' . esc($demande['traitePar']) : '—' ?></span>
               <?php endif; ?>
             </td>
           </tr>
@@ -127,8 +127,8 @@
 </div>
 
 <?php if ($focus): ?>
-  <div class="form-section" style="<?= $focus['action'] === 'refuse' ? 'border-color:var(--danger-br);background:var(--danger-bg)' : 'border-color:var(--success-br);background:var(--success-bg)' ?>">
-    <h3 style="color:<?= $focus['action'] === 'refuse' ? 'var(--danger)' : 'var(--success)' ?>">
+  <div class="form-section <?= $focus['action'] === 'refuse' ? 'form-section-refuse' : 'form-section-approve' ?>">
+    <h3 class="<?= $focus['action'] === 'refuse' ? 'form-title-refuse' : 'form-title-approve' ?>">
       <?php if ($focus['action'] === 'refuse'): ?>
         <i class="bi bi-x-circle"></i> Confirmer le refus — <?= esc($focus['employe']) ?>
       <?php else: ?>
@@ -136,10 +136,10 @@
       <?php endif; ?>
     </h3>
 
-    <div class="td-muted" style="margin-bottom:1rem">
+    <div class="td-muted u-mb-1">
       Demande de <strong><?= esc((string) $focus['nbJours']) ?> jours</strong> · <?= esc($focus['periode']) ?> · Type : <?= esc($focus['type']) ?>
       <?php if ($focus['action'] === 'approve' && !$focus['soldeSuffisant']): ?>
-        <div class="flash flash-warn" style="margin-top:.75rem">
+        <div class="flash flash-warn u-mt-75">
           <i class="bi bi-exclamation-triangle-fill"></i>
           <span>Solde insuffisant pour approuver cette demande.</span>
         </div>
@@ -154,11 +154,11 @@
       </div>
       <div class="form-actions">
         <?php if ($focus['action'] === 'refuse'): ?>
-          <button class="btn-sm btn-refuse" type="submit" style="padding:9px 16px;font-size:.875rem"><i class="bi bi-x-lg"></i> Confirmer le refus</button>
+          <button class="btn-sm btn-refuse action-confirm" type="submit"><i class="bi bi-x-lg"></i> Confirmer le refus</button>
         <?php else: ?>
-          <button class="btn-sm btn-approve" type="submit" style="padding:9px 16px;font-size:.875rem;<?= !$focus['soldeSuffisant'] ? 'opacity:.45;cursor:not-allowed' : '' ?>" <?= !$focus['soldeSuffisant'] ? 'disabled' : '' ?>><i class="bi bi-check-lg"></i> Confirmer l'approbation</button>
+          <button class="btn-sm btn-approve action-confirm<?= !$focus['soldeSuffisant'] ? ' action-confirm-disabled' : '' ?>" type="submit" <?= !$focus['soldeSuffisant'] ? 'disabled' : '' ?>><i class="bi bi-check-lg"></i> Confirmer l'approbation</button>
         <?php endif; ?>
-        <a class="btn-secondary" href="<?= site_url('rh/demandes') ?>" style="padding:9px 16px;font-size:.875rem"><i class="bi bi-arrow-left"></i> Annuler</a>
+        <a class="btn-secondary action-confirm" href="<?= site_url('rh/demandes') ?>"><i class="bi bi-arrow-left"></i> Annuler</a>
       </div>
     </form>
   </div>
