@@ -158,13 +158,19 @@ INSERT OR IGNORE INTO types_conge (id, libelle, jours_annuels, deductible) VALUE
     (3, 'Congé Special', 5, 0);
 
 -- Comptes utilisateurs  (passwords = password_hash via PHP — à remplacer)
--- admin123  → $2y$10$... (généré avec password_hash('admin123', PASSWORD_DEFAULT))
--- pass123   → $2y$10$... (généré avec password_hash('pass123',  PASSWORD_DEFAULT))
+
+/* 
+
+php -r "echo password_hash('marie', PASSWORD_DEFAULT) . PHP_EOL;"
+admin
+soa
+marie
+*/
 
 INSERT OR IGNORE INTO employes (id, nom, prenom, email, password, role, departement_id, date_embauche) VALUES
-    (1, 'Admin',  'System', 'admin@techmada.mg', '__HASH_ADMIN__', 'admin',  4, '2020-01-01'),
-    (2, 'Rakoto', 'Soa',    'soa@techmada.mg',   '__HASH_PASS__',  'employe',1, '2022-03-01'),
-    (3, 'Rabe',   'Marie',  'rh@techmada.mg',    '__HASH_PASS__',  'rh',     4, '2020-01-15');
+    (1, 'Admin',  'System', 'admin@techmada.mg', '$2y$10$4ymuayy1c9amHh5ArKSA0u1EujiCIc.j6QILoBeQRNW5BQuic6dvm', 'admin',  4, '2020-01-01'),
+    (2, 'Rakoto', 'Soa',    'soa@techmada.mg',   '$2y$10$TQW1GddhlPpCNenoC/lwmeUXsKMgSaOCTucHZV9c7w73sXZpWkKAu',  'employe',1, '2022-03-01'),
+    (3, 'Rabe',   'Marie',  'rh@techmada.mg',    '$2y$10$rFLC6/O8o3O0HI05x/JrZuKeLNU3jRAjnOkv2NYjbDUIWwMg8qoOO',  'rh',     4, '2020-01-15');
 
 -- Soldes initiaux année 2025
 -- Soa : congé annuel + maladie
@@ -174,4 +180,4 @@ INSERT OR IGNORE INTO soldes (employe_id, type_conge_id, annee, jours_attribues,
     (2, 1, 2025, 30, 0),
     (2, 2, 2025, 15, 0),
     (3, 1, 2025, 30, 0),
-    (3, 2, 2025, 15, 0);
+    (3, 3, 2025, 5, 0);
