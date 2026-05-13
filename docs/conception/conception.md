@@ -1,11 +1,42 @@
 # Conception — TechMada RH · CI4 + SQLite
 
-> Projet : Système de gestion des congés interne  
-> Stack : CodeIgniter 4 · SQLite · Bootstrap 5 · DM Sans / Playfair Display  
-> Durée cible : 4h en binôme
+---
+# Rôles utilisateurs
+
+## Employé
+
+### Fonctionnalités
+
+- Se connecter
+- Voir son solde
+- Soumettre une demande de congé
+- Voir ses demandes
+- Annuler une demande en attente
 
 ---
 
+## RH
+
+### Fonctionnalités
+
+- Voir toutes les demandes
+- Approuver une demande
+- Refuser une demande
+- Ajouter un commentaire RH
+- Mettre à jour automatiquement les soldes
+
+---
+
+## Administrateur
+
+### Fonctionnalités
+
+- Gérer les employés
+- CRUD utilisateurs
+- Tableau de bord
+- Gérer les types de congés
+
+---
 ## 1. Architecture générale
 
 ```
@@ -62,7 +93,7 @@ techmada-rh/
 │       └── Seeds/
 │           └── MainSeeder.php
 ├── writable/
-│   └── techmada.db             ← base SQLite
+│   └── database/techmada.db             ← base SQLite
 └── public/
 ```
 
