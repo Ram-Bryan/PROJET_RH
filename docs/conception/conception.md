@@ -93,7 +93,7 @@ techmada-rh/
 | prenom | VARCHAR(100) | NOT NULL |
 | email | VARCHAR(150) | UNIQUE NOT NULL |
 | password | VARCHAR(255) | NOT NULL (password_hash) |
-| role | VARCHAR(20) | DEFAULT 'employe' — enum: employe/rh/admin |
+| role | VARCHAR(git 20) | DEFAULT 'employe' — enum: employe/rh/admin |
 | departement_id | INTEGER | FK → departements.id |
 | date_embauche | DATE | NOT NULL |
 | actif | TINYINT | DEFAULT 1 |
