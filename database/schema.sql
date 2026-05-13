@@ -153,7 +153,7 @@ INSERT OR IGNORE INTO departements (id, nom) VALUES
 
 -- Types de congé
 INSERT OR IGNORE INTO types_conge (id, libelle, jours_annuels, deductible) VALUES
-    (1, 'Congé Annuel', 30, 1),
+    (1, 'Congé annuel', 30, 1),
     (2, 'Congé Maladie', 10, 1),
     (3, 'Congé Special', 5, 0);
 

@@ -31,7 +31,11 @@ class CongeModel extends Model
             ->where('employe_id', $id);
 
         if ($statut) {
-            $builder->where('statut', $statut);
+            if ($statut === 'en_attente') {
+                $builder->whereIn('statut', ['en_attente', 'en attente']);
+            } else {
+                $builder->where('statut', $statut);
+            }
         }
 
         return $builder
@@ -43,7 +47,7 @@ class CongeModel extends Model
     public function getPendingForRh(int $rhEmployeId = null): array
     {
         $builder = $this->db->table('v_conges_detail')
-            ->where('statut', 'en_attente');
+            ->whereIn('statut', ['en_attente', 'en attente']);
 
         if ($rhEmployeId !== null) {
             $departementId = $this->db->table('employes')
@@ -101,13 +105,30 @@ class CongeModel extends Model
         return $jours;
     }
 
-    public function annuler(int $congeId, int $employeId): bool
+    public function getByIdForEmploye(int $congeId, int $employeId): ?array
     {
-        return (bool) $this->builder()
+        $row = $this->db->table('v_conges_detail')
             ->where('id', $congeId)
             ->where('employe_id', $employeId)
-            ->where('statut', 'en_attente')
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
+
+    public function annuler(int $congeId, int $employeId): bool
+    {
+        $ok = (bool) $this->builder()
+            ->where('id', $congeId)
+            ->where('employe_id', $employeId)
+            ->whereIn('statut', ['en_attente', 'en attente'])
             ->set('statut', 'annulee')
             ->update();
+
+        if (!$ok) {
+            return false;
+        }
+
+        return $this->db->affectedRows() > 0;
     }
 }
