@@ -13,7 +13,7 @@
     <li><a href="#"><i class="bi bi-inbox"></i> Toutes les demandes</a></li>
     <li><a href="<?= site_url('admin/employes') ?>" class="active"><i class="bi bi-people"></i> Employes</a></li>
     <li><a href="#"><i class="bi bi-building"></i> Departements</a></li>
-    <li><a href="#"><i class="bi bi-tags"></i> Types de conge</a></li>
+    <li><a href="<?= site_url('admin/types-conge') ?>"><i class="bi bi-tags"></i> Types de conge</a></li>
 </ul>
 <div class="sidebar-user">
     <?php
@@ -167,14 +167,40 @@
                         <?php endif; ?>
                     </td>
                     <td>
-                        <div class="action-btns">
-                            <button class="btn-sm btn-edit" type="button"><i class="bi bi-pencil"></i> Editer</button>
+                        <details>
+                            <summary class="btn-sm btn-edit" style="display:inline-block;cursor:pointer;list-style:none"><i class="bi bi-pencil"></i> Editer</summary>
+                            <form action="<?= site_url('admin/employes/update/' . $employe['id']) ?>" method="post" style="margin-top:.5rem;display:grid;gap:.45rem;min-width:260px">
+                                <?= csrf_field() ?>
+                                <input class="f-input" type="text" name="prenom" value="<?= esc($employe['prenom']) ?>" placeholder="Prenom" />
+                                <input class="f-input" type="text" name="nom" value="<?= esc($employe['nom']) ?>" placeholder="Nom" />
+                                <input class="f-input" type="email" name="email" value="<?= esc($employe['email']) ?>" placeholder="Email" />
+                                <input class="f-input" type="password" name="password" placeholder="Nouveau mot de passe (optionnel)" />
+                                <select class="f-select" name="departement_id">
+                                    <option value="">-- Aucun --</option>
+                                    <?php foreach ($departements as $departement): ?>
+                                        <option value="<?= esc($departement['id']) ?>" <?= (string) ($employe['departement_id'] ?? '') === (string) $departement['id'] ? 'selected' : '' ?>>
+                                            <?= esc($departement['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <select class="f-select" name="role">
+                                    <option value="employe" <?= $employe['role'] === 'employe' ? 'selected' : '' ?>>Employe</option>
+                                    <option value="rh" <?= $employe['role'] === 'rh' ? 'selected' : '' ?>>Responsable RH</option>
+                                    <option value="admin" <?= $employe['role'] === 'admin' ? 'selected' : '' ?>>Administrateur</option>
+                                </select>
+                                <input class="f-input" type="date" name="date_embauche" value="<?= esc($employe['date_embauche']) ?>" />
+                                <button class="btn-sm btn-edit" type="submit"><i class="bi bi-check2-circle"></i> Enregistrer</button>
+                            </form>
+                        </details>
+
+                        <form action="<?= site_url('admin/employes/toggle-status/' . $employe['id']) ?>" method="post" style="display:inline-block;margin-top:.45rem">
+                            <?= csrf_field() ?>
                             <?php if ((int) $employe['actif'] === 1): ?>
-                                <button class="btn-sm btn-del" type="button"><i class="bi bi-slash-circle"></i></button>
+                                <button class="btn-sm btn-del" type="submit"><i class="bi bi-slash-circle"></i> Desactiver</button>
                             <?php else: ?>
-                                <button class="btn-sm btn-view" type="button"><i class="bi bi-arrow-counterclockwise"></i> Reactiver</button>
+                                <button class="btn-sm btn-view" type="submit"><i class="bi bi-arrow-counterclockwise"></i> Reactiver</button>
                             <?php endif; ?>
-                        </div>
+                        </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
