@@ -117,9 +117,7 @@
               <span class="solde-label"><?= esc($solde['type']) ?></span>
               <span class="solde-value"><?= esc((string) $solde['restant']) ?> j</span>
             </div>
-            <div class="solde-bar">
-              <div class="solde-fill<?= $solde['class'] ? ' ' . esc($solde['class']) : '' ?>" style="width:<?= esc((string) $solde['percent']) ?>%"></div>
-            </div>
+            <progress class="solde-progress<?= $solde['class'] ? ' ' . esc($solde['class']) : '' ?>" value="<?= esc((string) $solde['restant']) ?>" max="<?= esc((string) $solde['attribues']) ?>"></progress>
           </div>
         <?php endforeach; ?>
       </div>

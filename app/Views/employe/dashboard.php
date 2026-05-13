@@ -24,7 +24,7 @@
             <div class="user-name"><?= esc(trim($employe['prenom'] . ' ' . $employe['nom'])) ?></div>
             <div class="user-role">Employé<?= $employe['dept'] ? ' · ' . esc($employe['dept']) : '' ?></div>
         </div>
-        <a href="<?= site_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
+        <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Déconnexion"><i class="bi bi-box-arrow-right"></i></a>
     </div>
 </div>
 <?= $this->endSection() ?>
@@ -35,7 +35,7 @@
     <div class="topbar-breadcrumb">Accueil</div>
 </div>
 <div class="topbar-actions">
-    <a href="<?= site_url('employe/conges/create') ?>" class="btn-forest" style="padding:7px 14px;font-size:.82rem">
+    <a href="<?= site_url('employe/conges/create') ?>" class="btn-forest btn-compact">
         <i class="bi bi-plus-lg"></i> Nouvelle demande
     </a>
 </div>
@@ -68,14 +68,14 @@
 
 <div class="data-card">
     <div class="data-card-head"><h3>Mes soldes de congés — <?= esc((string) $annee) ?></h3></div>
-    <div style="padding:1rem 1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem">
+    <div class="grid-soldes">
         <?php foreach ($soldes as $solde): ?>
-            <div class="solde-card" style="margin:0">
+            <div class="solde-card card-no-margin">
                 <div class="solde-header">
                     <span class="solde-type"><?= esc($solde['type']) ?></span>
                     <span class="solde-nums"><strong><?= esc((string) $solde['restant']) ?></strong> / <?= esc((string) $solde['attribues']) ?> j</span>
                 </div>
-                <div class="solde-bar"><div class="solde-fill<?= $solde['class'] ? ' ' . esc($solde['class']) : '' ?>" style="width:<?= esc((string) $solde['percent']) ?>%"></div></div>
+                <progress class="solde-progress<?= $solde['class'] ? ' ' . esc($solde['class']) : '' ?>" value="<?= esc((string) $solde['restant']) ?>" max="<?= esc((string) $solde['attribues']) ?>"></progress>
                 <div class="solde-label"><?= esc((string) $solde['restant']) ?> jours restants · <?= esc((string) $solde['pris']) ?> pris</div>
             </div>
         <?php endforeach; ?>
@@ -85,7 +85,7 @@
 <div class="data-card">
     <div class="data-card-head">
         <h3>Mes dernières demandes</h3>
-        <a href="<?= site_url('employe/conges') ?>" style="font-size:.8rem;color:var(--forest);text-decoration:none">Voir tout →</a>
+        <a href="<?= site_url('employe/conges') ?>" class="link-forest">Voir tout →</a>
     </div>
     <table class="tbl">
         <thead>
@@ -106,12 +106,12 @@
                         <td><span class="statut <?= esc($demande['statutBadge']) ?>"><?= esc($demande['statutLabel']) ?></span></td>
                         <td>
                             <?php if ($demande['statut'] === 'en_attente'): ?>
-                                <form action="<?= site_url('employe/conges/annuler/' . $demande['id']) ?>" method="post" style="display:inline">
+                                <form action="<?= site_url('employe/conges/annuler/' . $demande['id']) ?>" method="post" class="u-inline">
                                     <?= csrf_field() ?>
                                     <button class="btn-sm btn-cancel"><i class="bi bi-x"></i> Annuler</button>
                                 </form>
                             <?php else: ?>
-                                <span class="td-muted" style="font-size:.75rem">—</span>
+                                <span class="td-muted u-fs-75">—</span>
                             <?php endif; ?>
                         </td>
                     </tr>

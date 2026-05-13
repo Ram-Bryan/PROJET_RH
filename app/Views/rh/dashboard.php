@@ -19,7 +19,7 @@
             <div class="user-name"><?= esc(trim($rh['prenom'] . ' ' . $rh['nom'])) ?></div>
             <div class="user-role">Responsable RH</div>
         </div>
-        <a href="<?= site_url('logout') ?>" style="margin-left:auto;color:rgba(255,255,255,.25);font-size:1.1rem" title="Deconnexion">
+        <a href="<?= site_url('logout') ?>" class="sidebar-logout" title="Deconnexion">
             <i class="bi bi-box-arrow-right"></i>
         </a>
     </div>
@@ -32,7 +32,7 @@
     <div class="topbar-breadcrumb">Accueil</div>
 </div>
 <div class="topbar-actions">
-    <span style="font-size:.8rem;color:var(--muted);background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:5px 10px;display:flex;align-items:center;gap:5px;color:var(--warn)">
+    <span class="topbar-pill-warn">
         <i class="bi bi-hourglass-split"></i> <?= esc((string) $stats['en_attente']) ?> en attente
     </span>
 </div>
@@ -60,7 +60,7 @@
 <div class="data-card">
     <div class="data-card-head">
         <h3>Dernieres demandes</h3>
-        <a href="<?= site_url('rh/demandes') ?>" style="font-size:.8rem;color:var(--forest);text-decoration:none">Voir tout →</a>
+        <a href="<?= site_url('rh/demandes') ?>" class="link-forest">Voir tout →</a>
     </div>
     <table class="tbl">
         <thead>
