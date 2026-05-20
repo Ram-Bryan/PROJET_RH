@@ -34,6 +34,72 @@ class CongeController extends BaseController
         ]);
     }
 
+    public function calendar()
+    {
+        if (!session()->has('user_id')) {
+            return redirect()->to('/');
+        }
+
+        $employeId = (int) session('user_id');
+
+        return view('employe/conge_calendar', [
+            'employe' => $this->getEmployeHeader($employeId),
+        ]);
+    }
+
+    public function calendarEvents()
+    {
+        if (!session()->has('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Unauthorized']);
+        }
+
+        $employeId = (int) session('user_id');
+        $congeModel = new CongeModel();
+        $conges = $congeModel->getByEmploye($employeId, null);
+
+        $events = [];
+        foreach ($conges as $conge) {
+            $dateFin = new DateTimeImmutable($conge['date_fin']);
+            $events[] = [
+                'id' => (string) $conge['id'],
+                'title' => $conge['type_conge_libelle'],
+                'start' => $conge['date_debut'],
+                'end' => $dateFin->modify('+1 day')->format('Y-m-d'),
+                'allDay' => true,
+                'className' => ['fc-conge', $this->mapTypeBadge($conge['type_conge_libelle'])],
+                'extendedProps' => [
+                    'statut' => $conge['statut'],
+                    'statutLabel' => $this->mapStatutLabel($conge['statut']),
+                ],
+            ];
+        }
+
+        return $this->response->setJSON($events);
+    }
+
+    public function statsByType()
+    {
+        if (!session()->has('user_id')) {
+            return $this->response->setStatusCode(401)->setJSON(['error' => 'Unauthorized']);
+        }
+
+        $employeId = (int) session('user_id');
+        $congeModel = new CongeModel();
+        $rows = $congeModel->countByTypeForEmploye($employeId);
+
+        $labels = [];
+        $values = [];
+        foreach ($rows as $row) {
+            $labels[] = (string) $row['type'];
+            $values[] = (int) $row['nb'];
+        }
+
+        return $this->response->setJSON([
+            'labels' => $labels,
+            'values' => $values,
+        ]);
+    }
+
     public function create()
     {
         if (!session()->has('user_id')) {

@@ -44,6 +44,17 @@ class CongeModel extends Model
             ->getResultArray();
     }
 
+    public function countByTypeForEmploye(int $employeId): array
+    {
+        return $this->db->table('v_conges_detail')
+            ->select('type_conge_libelle as type, COUNT(*) as nb')
+            ->where('employe_id', $employeId)
+            ->groupBy('type_conge_libelle')
+            ->orderBy('type_conge_libelle', 'ASC')
+            ->get()
+            ->getResultArray();
+    }
+
     public function getPendingForRh(int $rhEmployeId = null): array
     {
         $builder = $this->db->table('v_conges_detail')
