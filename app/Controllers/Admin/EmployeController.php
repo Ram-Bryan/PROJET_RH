@@ -3,24 +3,18 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use Exception;
+use App\Models\DepartementModel;
+use App\Models\EmployeModel;
 
 class EmployeController extends BaseController
 {
     public function index(): string
     {
-        $db = db_connect();
+        $employeModel = new EmployeModel();
+        $departementModel = new DepartementModel();
 
-        $employes = $db->table('v_employes_detail')
-            ->orderBy('nom', 'ASC')
-            ->orderBy('prenom', 'ASC')
-            ->get()
-            ->getResultArray();
-
-        $departements = $db->table('departements')
-            ->orderBy('nom', 'ASC')
-            ->get()
-            ->getResultArray();
+        $employes = $employeModel->getAdminList();
+        $departements = $departementModel->getAllOrdered();
 
         return view('admin/employes', [
             'employes' => $employes,
@@ -55,39 +49,10 @@ class EmployeController extends BaseController
             'actif' => 1,
         ];
 
-        $db = db_connect();
+        $employeModel = new EmployeModel();
+        $employeId = $employeModel->createWithSoldes($data);
 
-        $db->transBegin();
-
-        try {
-            $db->table('employes')->insert($data);
-            $employeId = (int) $db->insertID();
-
-            $types = $db->table('types_conge')
-                ->select('id, jours_annuels')
-                ->get()
-                ->getResultArray();
-
-            if (!empty($types)) {
-                $annee = (int) date('Y');
-                $soldes = [];
-                foreach ($types as $type) {
-                    $soldes[] = [
-                        'employe_id' => $employeId,
-                        'type_conge_id' => (int) $type['id'],
-                        'annee' => $annee,
-                        'jours_attribues' => (int) $type['jours_annuels'],
-                        'jours_pris' => 0,
-                    ];
-                }
-
-                $db->table('soldes')->insertBatch($soldes);
-            }
-
-            $db->transCommit();
-        } catch (Exception $exception) {
-            $db->transRollback();
-
+        if ($employeId === null) {
             return redirect()->back()->withInput()->with('error', 'Creation impossible. Veuillez reessayer.');
         }
 
@@ -96,12 +61,8 @@ class EmployeController extends BaseController
 
     public function update(int $id)
     {
-        $db = db_connect();
-
-        $existing = $db->table('employes')
-            ->where('id', $id)
-            ->get()
-            ->getRowArray();
+        $employeModel = new EmployeModel();
+        $existing = $employeModel->find($id);
 
         if (!$existing) {
             return redirect()->to('admin/employes')->with('error', 'Employe introuvable.');
@@ -123,10 +84,7 @@ class EmployeController extends BaseController
 
         $email = (string) $this->request->getPost('email');
 
-        $emailExists = $db->table('employes')
-            ->where('email', $email)
-            ->where('id !=', $id)
-            ->countAllResults() > 0;
+        $emailExists = $employeModel->emailExists($email, $id);
 
         if ($emailExists) {
             return redirect()->back()->withInput()->with('error', 'Cet email est deja utilise par un autre employe.');
@@ -146,11 +104,7 @@ class EmployeController extends BaseController
             $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
 
-        try {
-            $db->table('employes')
-                ->where('id', $id)
-                ->update($data);
-        } catch (Exception $exception) {
+        if (!$employeModel->updateEmploye($id, $data)) {
             return redirect()->back()->withInput()->with('error', 'Mise a jour impossible. Veuillez reessayer.');
         }
 
@@ -159,25 +113,10 @@ class EmployeController extends BaseController
 
     public function toggleStatus(int $id)
     {
-        $db = db_connect();
+        $employeModel = new EmployeModel();
+        $nextStatus = $employeModel->toggleActif($id);
 
-        $employe = $db->table('employes')
-            ->select('id, actif')
-            ->where('id', $id)
-            ->get()
-            ->getRowArray();
-
-        if (!$employe) {
-            return redirect()->to('admin/employes')->with('error', 'Employe introuvable.');
-        }
-
-        $nextStatus = ((int) $employe['actif'] === 1) ? 0 : 1;
-
-        try {
-            $db->table('employes')
-                ->where('id', $id)
-                ->update(['actif' => $nextStatus]);
-        } catch (Exception $exception) {
+        if ($nextStatus === null) {
             return redirect()->to('admin/employes')->with('error', 'Changement de statut impossible. Veuillez reessayer.');
         }
 
@@ -188,12 +127,8 @@ class EmployeController extends BaseController
 
     public function delete(int $id)
     {
-        $db = db_connect();
-
-        $employe = $db->table('employes')
-            ->where('id', $id)
-            ->get()
-            ->getRowArray();
+        $employeModel = new EmployeModel();
+        $employe = $employeModel->find($id);
 
         if (!$employe) {
             return redirect()->to('admin/employes')->with('error', 'Employe introuvable.');
@@ -203,26 +138,13 @@ class EmployeController extends BaseController
             return redirect()->to('admin/employes')->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }
 
-        $hasConge = $db->table('conges')
-            ->groupStart()
-            ->where('employe_id', $id)
-            ->orWhere('traite_par', $id)
-            ->groupEnd()
-            ->countAllResults() > 0;
+        $hasConge = $employeModel->hasConge($id);
 
         if ($hasConge) {
             return redirect()->to('admin/employes')->with('error', 'Suppression impossible: cet employe est lie a des demandes de conge.');
         }
 
-        $db->transBegin();
-
-        try {
-            $db->table('soldes')->where('employe_id', $id)->delete();
-            $db->table('employes')->where('id', $id)->delete();
-
-            $db->transCommit();
-        } catch (Exception $exception) {
-            $db->transRollback();
+        if (!$employeModel->deleteWithSoldes($id)) {
             return redirect()->to('admin/employes')->with('error', 'Suppression impossible. Veuillez reessayer.');
         }
 

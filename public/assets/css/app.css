@@ -311,6 +311,13 @@ code,pre,.mono{font-family:'DM Mono',monospace}
 .card-no-margin{margin:0}
 .td-note{font-size:.8rem}
 
+/* --------------------------------------------------------------------------
+   CHARTS
+   -------------------------------------------------------------------------- */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.25rem;margin-bottom:1.75rem}
+.chart-wrap{padding:1rem 1.25rem 1.35rem;height:220px}
+.chart-wrap canvas{width:100%;height:100%}
+
 /* Progress element replacement for inline width bars */
 .solde-progress{width:100%;height:6px;border-radius:3px;overflow:hidden;appearance:none;-webkit-appearance:none}
 .solde-progress::-webkit-progress-bar{background:var(--mint);border-radius:3px}

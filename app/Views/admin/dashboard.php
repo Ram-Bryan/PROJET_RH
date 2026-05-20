@@ -69,6 +69,25 @@
     </div>
 </div>
 
+<div class="charts-grid">
+    <div class="data-card">
+        <div class="data-card-head">
+            <h3>Conges par mois (<?= esc($anneeGraph ?? date('Y')) ?>)</h3>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="admin-chart-month" height="160"></canvas>
+        </div>
+    </div>
+    <div class="data-card">
+        <div class="data-card-head">
+            <h3>Conges par jour de semaine</h3>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="admin-chart-weekday" height="160"></canvas>
+        </div>
+    </div>
+</div>
+
 <div class="data-card">
 <div class="data-card-head">
     <h3>Demandes recentes</h3>
@@ -104,4 +123,80 @@
         </tbody>
     </table>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+    const congesParMois = <?= json_encode($congesParMois ?? array_fill(0, 12, 0)) ?>;
+    const congesParJour = <?= json_encode($congesParJour ?? array_fill(0, 7, 0)) ?>;
+
+    const monthLabels = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const weekdayLabels = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+    const sharedScales = {
+        x: {
+            grid: { color: 'rgba(45,90,61,0.08)' },
+            ticks: { color: '#7a8f80', font: { size: 11 } },
+        },
+        y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(45,90,61,0.08)' },
+            ticks: { color: '#7a8f80', font: { size: 11 }, precision: 0 },
+        },
+    };
+
+    const monthCtx = document.getElementById('admin-chart-month');
+    if (monthCtx) {
+        new Chart(monthCtx, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Demandes',
+                    data: congesParMois,
+                    borderColor: '#2d5a3d',
+                    backgroundColor: 'rgba(45,90,61,0.15)',
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#2d5a3d',
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { mode: 'index', intersect: false },
+                },
+                scales: sharedScales,
+            },
+        });
+    }
+
+    const weekdayCtx = document.getElementById('admin-chart-weekday');
+    if (weekdayCtx) {
+        new Chart(weekdayCtx, {
+            type: 'bar',
+            data: {
+                labels: weekdayLabels,
+                datasets: [{
+                    label: 'Demandes',
+                    data: congesParJour,
+                    backgroundColor: 'rgba(95,168,118,0.7)',
+                    borderColor: '#3d7a52',
+                    borderWidth: 1,
+                    borderRadius: 8,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                },
+                scales: sharedScales,
+            },
+        });
+    }
+</script>
 <?= $this->endSection() ?>
