@@ -124,7 +124,7 @@
     </table>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="<?= base_url('assets/lib/chartjs/dist/chart.umd.min.js') ?>"></script>
 <script>
     const congesParMois = <?= json_encode($congesParMois ?? array_fill(0, 12, 0)) ?>;
     const congesParJour = <?= json_encode($congesParJour ?? array_fill(0, 7, 0)) ?>;
