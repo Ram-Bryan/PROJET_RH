@@ -309,6 +309,72 @@ class CongeModel extends Model
             ->getResultArray();
     }
 
+    public function getMonthlyCounts(int $annee): array
+    {
+        $start = sprintf('%04d-01-01', $annee);
+        $end = sprintf('%04d-01-01', $annee + 1);
+
+        $rows = $this->db->table('conges')
+            ->select("strftime('%m', created_at) AS mois, COUNT(*) AS nb")
+            ->where('created_at >=', $start)
+            ->where('created_at <', $end)
+            ->groupBy("strftime('%m', created_at)")
+            ->get()
+            ->getResultArray();
+
+        $counts = array_fill(1, 12, 0);
+
+        foreach ($rows as $row) {
+            $mois = (int) ($row['mois'] ?? 0);
+            if ($mois >= 1 && $mois <= 12) {
+                $counts[$mois] = (int) ($row['nb'] ?? 0);
+            }
+        }
+
+        return array_values($counts);
+    }
+
+    public function getWeekdayCounts(int $annee): array
+    {
+        $start = sprintf('%04d-01-01', $annee);
+        $end = sprintf('%04d-01-01', $annee + 1);
+
+        $rows = $this->db->table('conges')
+            ->select("strftime('%w', date_debut) AS jour, COUNT(*) AS nb")
+            ->where('date_debut >=', $start)
+            ->where('date_debut <', $end)
+            ->groupBy("strftime('%w', date_debut)")
+            ->get()
+            ->getResultArray();
+
+        $counts = [
+            1 => 0,
+            2 => 0,
+            3 => 0,
+            4 => 0,
+            5 => 0,
+            6 => 0,
+            0 => 0,
+        ];
+
+        foreach ($rows as $row) {
+            $jour = (int) ($row['jour'] ?? -1);
+            if (array_key_exists($jour, $counts)) {
+                $counts[$jour] = (int) ($row['nb'] ?? 0);
+            }
+        }
+
+        return [
+            $counts[1],
+            $counts[2],
+            $counts[3],
+            $counts[4],
+            $counts[5],
+            $counts[6],
+            $counts[0],
+        ];
+    }
+
     public function annuler(int $congeId, int $employeId): bool
     {
         $ok = (bool) $this->builder()

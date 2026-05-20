@@ -14,6 +14,7 @@ class DashboardController extends BaseController
         $employeModel = new EmployeModel();
         $congeModel = new CongeModel();
         $departementModel = new DepartementModel();
+        $annee = (int) date('Y');
 
         return view('admin/dashboard', [
             'employesActifs' => $employeModel->countActifs(),
@@ -21,6 +22,9 @@ class DashboardController extends BaseController
             'approuveesCeMois' => $congeModel->countApprovedForMonth(date('Y-m')),
             'departementsCount' => $departementModel->countAllResults(),
             'recentes' => $congeModel->getRecentDetails(6),
+            'anneeGraph' => $annee,
+            'congesParMois' => $congeModel->getMonthlyCounts($annee),
+            'congesParJour' => $congeModel->getWeekdayCounts($annee),
         ]);
     }
 }

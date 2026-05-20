@@ -3,18 +3,14 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use Exception;
+use App\Models\TypeCongeModel;
 
 class TypeCongeController extends BaseController
 {
     public function index(): string
     {
-        $db = db_connect();
-
-        $types = $db->table('types_conge')
-            ->orderBy('id', 'ASC')
-            ->get()
-            ->getResultArray();
+        $typeModel = new TypeCongeModel();
+        $types = $typeModel->getAllOrdered();
 
         return view('admin/types_conge', [
             'types' => $types,
@@ -38,41 +34,10 @@ class TypeCongeController extends BaseController
             'jours_annuels' => (int) $this->request->getPost('jours_annuels'),
             'deductible' => (int) $this->request->getPost('deductible'),
         ];
+        $typeModel = new TypeCongeModel();
+        $typeId = $typeModel->createWithSoldes($data);
 
-        $db = db_connect();
-        $db->transBegin();
-
-        try {
-            $db->table('types_conge')->insert($data);
-            $typeId = (int) $db->insertID();
-
-            // Initialiser les soldes pour tous les employés existants (actifs)
-            $annee = (int) date('Y');
-
-            $employes = $db->table('employes')
-                ->select('id')
-                ->where('actif', 1)
-                ->get()
-                ->getResultArray();
-
-            if (!empty($employes)) {
-                $soldes = [];
-                foreach ($employes as $employe) {
-                    $soldes[] = [
-                        'employe_id' => (int) $employe['id'],
-                        'type_conge_id' => $typeId,
-                        'annee' => $annee,
-                        'jours_attribues' => (int) $data['jours_annuels'],
-                        'jours_pris' => 0,
-                    ];
-                }
-
-                $db->table('soldes')->insertBatch($soldes);
-            }
-
-            $db->transCommit();
-        } catch (Exception $exception) {
-            $db->transRollback();
+        if ($typeId === null) {
             return redirect()->back()->withInput()->with('error', 'Enregistrement impossible. Veuillez reessayer.');
         }
 
@@ -81,12 +46,8 @@ class TypeCongeController extends BaseController
 
     public function update(int $id)
     {
-        $db = db_connect();
-
-        $existing = $db->table('types_conge')
-            ->where('id', $id)
-            ->get()
-            ->getRowArray();
+        $typeModel = new TypeCongeModel();
+        $existing = $typeModel->find($id);
 
         if (!$existing) {
             return redirect()->to('admin/types-conge')->with('error', 'Type de conge introuvable.');
@@ -107,12 +68,7 @@ class TypeCongeController extends BaseController
             'jours_annuels' => (int) $this->request->getPost('jours_annuels'),
             'deductible' => (int) $this->request->getPost('deductible'),
         ];
-
-        try {
-            $db->table('types_conge')
-                ->where('id', $id)
-                ->update($data);
-        } catch (Exception $exception) {
+        if (!$typeModel->updateType($id, $data)) {
             return redirect()->to('admin/types-conge')->with('error', 'Mise a jour impossible. Veuillez reessayer.');
         }
 
@@ -121,33 +77,20 @@ class TypeCongeController extends BaseController
 
     public function delete(int $id)
     {
-        $db = db_connect();
-
-        $type = $db->table('types_conge')
-            ->where('id', $id)
-            ->get()
-            ->getRowArray();
+        $typeModel = new TypeCongeModel();
+        $type = $typeModel->find($id);
 
         if (!$type) {
             return redirect()->to('admin/types-conge')->with('error', 'Type de conge introuvable.');
         }
 
-        $hasConge = $db->table('conges')
-            ->where('type_conge_id', $id)
-            ->countAllResults() > 0;
+        $hasConge = $typeModel->hasConge($id);
 
         if ($hasConge) {
             return redirect()->to('admin/types-conge')->with('error', 'Suppression impossible: ce type est deja utilise dans des demandes.');
         }
 
-        $db->transBegin();
-
-        try {
-            $db->table('soldes')->where('type_conge_id', $id)->delete();
-            $db->table('types_conge')->where('id', $id)->delete();
-            $db->transCommit();
-        } catch (Exception $exception) {
-            $db->transRollback();
+        if (!$typeModel->deleteWithSoldes($id)) {
             return redirect()->to('admin/types-conge')->with('error', 'Suppression impossible. Veuillez reessayer.');
         }
 

@@ -26,6 +26,11 @@ class DepartementModel extends Model
             ->getResultArray();
     }
 
+    public function getAllOrdered(): array
+    {
+        return $this->orderBy('nom', 'ASC')->findAll();
+    }
+
     public function existsByName(string $nom, ?int $exceptId = null): bool
     {
         $builder = $this->builder()->where('LOWER(nom)', mb_strtolower(trim($nom)));
