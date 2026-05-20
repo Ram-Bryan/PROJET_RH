@@ -9,6 +9,7 @@
   <li><a href="<?= site_url('employe/dashboard') ?>"><i class="bi bi-grid-1x2"></i> Tableau de bord</a></li>
   <li><a href="<?= site_url('employe/conges/create') ?>" class="active"><i class="bi bi-plus-circle"></i> Nouvelle demande</a></li>
   <li><a href="<?= site_url('employe/conges') ?>"><i class="bi bi-calendar3"></i> Mes demandes</a></li>
+  <li><a href="<?= site_url('employe/calendrier') ?>"><i class="bi bi-calendar2-week"></i> Calendrier</a></li>
   <li><a href="<?= site_url('employe/profil') ?>"><i class="bi bi-person"></i> Mon profil</a></li>
 </ul>
 <div class="sidebar-user">

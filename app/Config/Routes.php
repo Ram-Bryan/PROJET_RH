@@ -14,8 +14,11 @@ $routes->get('logout', 'Auth\LoginController::logout');
 $routes->group('employe', ['filter' => 'auth:employe'], static function ($routes) {
 	$routes->get('dashboard', 'Employe\DashboardController::index');
 	$routes->get('conges', 'Employe\CongeController::index');
+	$routes->get('calendrier', 'Employe\CongeController::calendar');
+	$routes->get('calendrier/evenements', 'Employe\CongeController::calendarEvents');
 	$routes->get('conges/create', 'Employe\CongeController::create');
 	$routes->post('conges', 'Employe\CongeController::store');
+	$routes->get('conges/stats', 'Employe\CongeController::statsByType');
 	$routes->post('conges/annuler/(:num)', 'Employe\CongeController::cancel/$1');
 	$routes->get('profil', 'Employe\\ProfilController::index');
 	$routes->post('profil', 'Employe\\ProfilController::update');
